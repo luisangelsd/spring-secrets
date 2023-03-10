@@ -7,7 +7,10 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -21,21 +24,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.secrets.dao.modelo.dao.IServiceCrudRepository;
 import com.secrets.dao.modelo.entitys.EntitySecretos;
-import com.secrets.dao.modelo.servicios.ServicioDaoSecretos;
+import com.secrets.dao.modelo.servicios.IServiceDaoSecrets;
+import com.secrets.dao.modelo.servicios.ServiceDaoSecrets;
 
 @CrossOrigin({"*"})
 @RestController
 @RequestMapping("")
 public class ControladorSecretos {
 	
-	
-	@Autowired
-	public ServicioDaoSecretos servicioDaoSecretos;
-	
+	//-- Variables globales
 	Map<String, Object> response=new HashMap<>();
 	List<EntitySecretos> listaSecretos=null;
 	EntitySecretos secreto=null;
+	Page<EntitySecretos> pageListaSecretos=null;
+	
+	
+	//-- Inyeccion de servicios
+	@Autowired
+	@Qualifier(value = "seerviceDaoSecrets")
+	public IServiceDaoSecrets serviceDaoSecretos;
 	
 	
 	// Method List
@@ -45,7 +54,7 @@ public class ControladorSecretos {
 		
 		try {
 			
-			this.listaSecretos=servicioDaoSecretos.listarTodos();
+			this.listaSecretos=this.serviceDaoSecretos.listarTodos();
 			
 			if (this.listaSecretos.isEmpty()) {
 				this.response.put("response", "No se han encontrado registros");
@@ -53,8 +62,42 @@ public class ControladorSecretos {
 			}
 			
 			return new ResponseEntity<List<EntitySecretos>>(this.listaSecretos,HttpStatus.OK);			
-		} catch (DataAccessException e) {
-			this.response.put("response", "e");
+		}
+		catch (DataAccessException e) {
+			this.response.put("error", "DataAccessException: " + e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		catch (Exception e) {
+			this.response.put("error", "Exception: "+e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		
+	}//end
+	
+	
+	// Method List
+	@GetMapping("/listar/page/{page}")
+	public ResponseEntity<?> paginado(@PathVariable(name = "page", required = true) Integer page){
+		
+		
+		try {
+			
+			this.pageListaSecretos=this.serviceDaoSecretos.paginado(PageRequest.of(page,4));
+			
+			if (this.listaSecretos.isEmpty()) {
+				this.response.put("response", "No se han encontrado registros");
+				return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.NOT_FOUND);
+			}
+			
+			return new ResponseEntity<List<EntitySecretos>>(this.listaSecretos,HttpStatus.OK);			
+		}
+		catch (DataAccessException e) {
+			this.response.put("error", "DataAccessException: " + e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		catch (Exception e) {
+			this.response.put("error", "Exception: "+e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -65,10 +108,10 @@ public class ControladorSecretos {
 	
 	// Method List by Category
 	@GetMapping("/listar/{categoria}")
-	public ResponseEntity<?> listarPorCategoria(@PathVariable(name = "categoria") String categoria){
+	public ResponseEntity<?> listarPorCategoria(@PathVariable(name = "categoria", required = true) String categoria){
 		
 		try {
-			this.listaSecretos=servicioDaoSecretos.listarPorCategoria(categoria);
+			this.listaSecretos=this.serviceDaoSecretos.listarPorCategoria(categoria);
 			
 			if (this.listaSecretos.isEmpty()) {
 				this.response.put("response", "No se encontraron registros");
@@ -77,11 +120,14 @@ public class ControladorSecretos {
 			
 			return new ResponseEntity<List<EntitySecretos>>(this.listaSecretos,HttpStatus.OK);
 			
-		} catch (DataAccessException e) {
-			
-			this.response.put("response", e);
+		}
+		catch (DataAccessException e) {
+			this.response.put("error", "DataAccessException: " + e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
-			
+		}
+		catch (Exception e) {
+			this.response.put("error", "Exception: "+e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 	}//end
@@ -90,21 +136,25 @@ public class ControladorSecretos {
 	
 	// Method Search by ID
 	@GetMapping("buscar/{id}")
-	public ResponseEntity<?> buscarPorId(@PathVariable(name = "id")Long id){
+	public ResponseEntity<?> buscarPorId(@PathVariable(name = "id", required = true)Long id){
 		
 		try {
-			this.secreto=servicioDaoSecretos.buscarPorId(id);
+			this.secreto=this.serviceDaoSecretos.buscarPorId(id);
 			if (this.secreto==null) {
 				response.put("response", "El secreto no existe");
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
 			
 			return new ResponseEntity<EntitySecretos>(this.secreto,HttpStatus.OK);
-		} catch (DataAccessException e) {
-			response.put("response", e);
-			return new ResponseEntity<Map<String,Object>>(response,HttpStatus.INTERNAL_SERVER_ERROR);
+		} 
+		catch (DataAccessException e) {
+			this.response.put("error", "DataAccessException: " + e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
+		catch (Exception e) {
+			this.response.put("error", "Exception: "+e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		
 	}
 	
@@ -121,11 +171,16 @@ public class ControladorSecretos {
 		}
 		
 		try {
-			this.secreto=servicioDaoSecretos.guardar(entitySecreto);
+			this.secreto=this.serviceDaoSecretos.guardar(entitySecreto);
 			return new ResponseEntity<EntitySecretos>(this.secreto,HttpStatus.CREATED);
 			
-		} catch (DataAccessException e) {
-			this.response.put("response", e.getMessage());
+		} 
+		catch (DataAccessException e) {
+			this.response.put("error", "DataAccessException: " + e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		catch (Exception e) {
+			this.response.put("error", "Exception: "+e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
@@ -135,7 +190,7 @@ public class ControladorSecretos {
 	
 	//Method Update
 	@PutMapping("/editar/{id}")
-	public ResponseEntity<?> editarPorId(@Valid @PathVariable( name = "id") Long id, @RequestBody EntitySecretos entitySecretos, BindingResult resulValid){
+	public ResponseEntity<?> editarPorId(@Valid @PathVariable( name = "id", required = true) Long id, @RequestBody EntitySecretos entitySecretos, BindingResult resulValid){
 		
 
 		
@@ -147,7 +202,7 @@ public class ControladorSecretos {
 		
 		
 		try {
-			EntitySecretos entitySecretoActualizar=servicioDaoSecretos.buscarPorId(id);
+			EntitySecretos entitySecretoActualizar=this.serviceDaoSecretos.buscarPorId(id);
 			
 			
 			if (entitySecretoActualizar==null) {
@@ -157,11 +212,16 @@ public class ControladorSecretos {
 			
 			 entitySecretoActualizar.setSecreto(entitySecretos.getSecreto());
 			 entitySecretoActualizar.setCategoria(entitySecretos.getCategoria());
-			 this.secreto=servicioDaoSecretos.guardar(entitySecretoActualizar);
+			 this.secreto=this.serviceDaoSecretos.guardar(entitySecretoActualizar);
 			 return new ResponseEntity<EntitySecretos>(this.secreto,HttpStatus.OK);
 			
-		} catch (DataAccessException e) {
-			this.response.put("response", e);
+		} 
+		catch (DataAccessException e) {
+			this.response.put("error", "DataAccessException: " + e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		catch (Exception e) {
+			this.response.put("error", "Exception: "+e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -170,27 +230,31 @@ public class ControladorSecretos {
 
 	//Method Delate
 	@DeleteMapping("eliminar/{id}")
-	public ResponseEntity<?> eliminarPorId(@PathVariable(name = "id") Long id){
+	public ResponseEntity<?> eliminarPorId(@PathVariable(name = "id", required = true) Long id){
 		
 		
 		
 		try {
 			
-			boolean validarExiste=servicioDaoSecretos.existePorId(id);
+			boolean validarExiste=this.serviceDaoSecretos.existePorId(id);
 			
 			if (!validarExiste) {
 				this.response.put("response", "No puedes eliminar este secreto porque no existe");
 				return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.NOT_FOUND);	
 			}
 			
-			servicioDaoSecretos.eliminarPorId(id);
+			this.serviceDaoSecretos.eliminarPorId(id);
 			return new ResponseEntity<>(HttpStatus.OK);
 			
-		} catch (DataAccessException e) {
-			this.response.put("response", e);
+		} 
+		catch (DataAccessException e) {
+			this.response.put("error", "DataAccessException: " + e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-
+		catch (Exception e) {
+			this.response.put("error", "Exception: "+e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 		
 	}//end
 	
