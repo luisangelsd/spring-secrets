@@ -23,13 +23,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.secrets.dao.modelo.dao.IServiceCrudRepository;
 import com.secrets.dao.modelo.entitys.EntitySecretos;
 import com.secrets.dao.modelo.servicios.IServiceDaoSecrets;
-import com.secrets.dao.modelo.servicios.ServiceDaoSecrets;
 
-@CrossOrigin({"*"})
+@CrossOrigin({"http://dev.sandovalguicho.com/secrets/","https://dev.sandovalguicho.com/secrets/","http://localhost:4200/"})
 @RestController
 @RequestMapping("")
 public class ControladorSecretos {
@@ -57,7 +54,7 @@ public class ControladorSecretos {
 			this.listaSecretos=this.serviceDaoSecretos.listarTodos();
 			
 			if (this.listaSecretos.isEmpty()) {
-				this.response.put("response", "No se han encontrado registros");
+				this.response.put("error", "No se han encontrado registros");
 				return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.NOT_FOUND);
 			}
 			
@@ -85,12 +82,12 @@ public class ControladorSecretos {
 			
 			this.pageListaSecretos=this.serviceDaoSecretos.paginado(PageRequest.of(page,4));
 			
-			if (this.listaSecretos.isEmpty()) {
-				this.response.put("response", "No se han encontrado registros");
+			if (this.pageListaSecretos.isEmpty()) {
+				this.response.put("error", "No se han encontrado registros");
 				return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.NOT_FOUND);
 			}
 			
-			return new ResponseEntity<List<EntitySecretos>>(this.listaSecretos,HttpStatus.OK);			
+			return new ResponseEntity<Page<EntitySecretos>>(this.pageListaSecretos,HttpStatus.OK);			
 		}
 		catch (DataAccessException e) {
 			this.response.put("error", "DataAccessException: " + e.getMessage());
@@ -114,7 +111,7 @@ public class ControladorSecretos {
 			this.listaSecretos=this.serviceDaoSecretos.listarPorCategoria(categoria);
 			
 			if (this.listaSecretos.isEmpty()) {
-				this.response.put("response", "No se encontraron registros");
+				this.response.put("error", "No se encontraron registros");
 				return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.NOT_FOUND);
 			}
 			
@@ -141,7 +138,7 @@ public class ControladorSecretos {
 		try {
 			this.secreto=this.serviceDaoSecretos.buscarPorId(id);
 			if (this.secreto==null) {
-				response.put("response", "El secreto no existe");
+				response.put("error", "El secreto no existe");
 				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 			}
 			
@@ -166,7 +163,7 @@ public class ControladorSecretos {
 		
 		
 		if (resulValid.hasErrors()) {
-			this.response.put("response", "Datos invalidos y/o nulos");
+			this.response.put("error", "Datos invalidos y/o nulos");
 			return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.BAD_REQUEST);
 		}
 		
@@ -195,7 +192,7 @@ public class ControladorSecretos {
 
 		
 		if (resulValid.hasErrors()) {
-			this.response.put("response", "Datos invalidos y/o nulos");
+			this.response.put("error", "Datos invalidos y/o nulos");
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -206,7 +203,7 @@ public class ControladorSecretos {
 			
 			
 			if (entitySecretoActualizar==null) {
-				this.response.put("response", "El secreto no puede ser editado porque no existe");
+				this.response.put("error", "El secreto no puede ser editado porque no existe");
 				return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.NOT_FOUND);
 			}
 			
@@ -239,7 +236,7 @@ public class ControladorSecretos {
 			boolean validarExiste=this.serviceDaoSecretos.existePorId(id);
 			
 			if (!validarExiste) {
-				this.response.put("response", "No puedes eliminar este secreto porque no existe");
+				this.response.put("error", "No puedes eliminar este secreto porque no existe");
 				return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.NOT_FOUND);	
 			}
 			
