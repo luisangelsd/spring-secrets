@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.secrets.dao.modelo.entitys.EntitySecretos;
 import com.secrets.dao.modelo.servicios.IServiceDaoSecrets;
 
-@CrossOrigin({"http://dev.sandovalguicho.com/secrets/","https://dev.sandovalguicho.com/secrets/","http://localhost:4200/"})
+@CrossOrigin({"*"})
 @RestController
 @RequestMapping("")
 public class ControladorSecretos {
@@ -53,7 +53,7 @@ public class ControladorSecretos {
 			
 			this.listaSecretos=this.serviceDaoSecretos.listarTodos();
 			
-			if (this.listaSecretos.isEmpty()) {
+			if (this.listaSecretos.isEmpty() || this.listaSecretos ==null) {
 				this.response.put("error", "No se han encontrado registros");
 				return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.NOT_FOUND);
 			}
@@ -72,21 +72,15 @@ public class ControladorSecretos {
 		
 	}//end
 	
-	
-	// Method List
-	@GetMapping("/listar/page/{page}")
-	public ResponseEntity<?> paginado(@PathVariable(name = "page", required = true) Integer page){
+	 
+	// Method List page
+	@GetMapping("/listar/page/{page}/elements/{elements}")
+	public ResponseEntity<?> paginado(@PathVariable(name = "page", required = true) Integer page, @PathVariable(name = "elements", required = true) Integer elements){
 		
 		
 		try {
 			
-			this.pageListaSecretos=this.serviceDaoSecretos.paginado(PageRequest.of(page,4));
-			
-			if (this.pageListaSecretos.isEmpty()) {
-				this.response.put("error", "No se han encontrado registros");
-				return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.NOT_FOUND);
-			}
-			
+			this.pageListaSecretos=this.serviceDaoSecretos.paginado(PageRequest.of(page,elements));	
 			return new ResponseEntity<Page<EntitySecretos>>(this.pageListaSecretos,HttpStatus.OK);			
 		}
 		catch (DataAccessException e) {
@@ -101,8 +95,6 @@ public class ControladorSecretos {
 	}//end
 	
 	
-	
-	
 	// Method List by Category
 	@GetMapping("/listar/{categoria}")
 	public ResponseEntity<?> listarPorCategoria(@PathVariable(name = "categoria", required = true) String categoria){
@@ -110,7 +102,7 @@ public class ControladorSecretos {
 		try {
 			this.listaSecretos=this.serviceDaoSecretos.listarPorCategoria(categoria);
 			
-			if (this.listaSecretos.isEmpty()) {
+			if (this.listaSecretos.isEmpty() || this.listaSecretos ==null) {
 				this.response.put("error", "No se encontraron registros");
 				return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.NOT_FOUND);
 			}
