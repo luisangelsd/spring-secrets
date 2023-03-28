@@ -56,10 +56,12 @@ public class ServiceDaoSecrets implements IServiceDaoSecrets{
 	}
 
 	
+	//-- Metodo: Paginado de todos los registros
 	@Override
 	@Transactional(readOnly = true)
 	public Page<EntitySecretos> paginado(Pageable pageable) throws DataAccessException {
 		return this.serviceCrudRepository.findAll(pageable);
 	}
+
 
 }

@@ -10,6 +10,7 @@ import com.secrets.dao.modelo.entitys.EntitySecretos;
 
 public interface IServiceDaoSecrets{
 	
+	//-- Metodos: CRUD
 	public List<EntitySecretos> listarTodos() throws DataAccessException;
 	public List<EntitySecretos> listarPorCategoria(String categoria) throws DataAccessException;
 	public EntitySecretos buscarPorId(Long id) throws DataAccessException;
@@ -17,6 +18,7 @@ public interface IServiceDaoSecrets{
 	public void eliminarPorId(Long id) throws DataAccessException;
 	public Boolean existePorId(Long id)throws DataAccessException;
 	
+	//-- Metodos: Paginado
 	public Page<EntitySecretos> paginado(Pageable pageable) throws DataAccessException;
 	
 
