@@ -40,24 +40,26 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 	//-- Segundo metodo: Configura el acceso a los clientes que tendras acceso (frintend), usuario y contraseña
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-		clients.inMemory().withClient("angular-app").secret(passwordEncoder.encode("87654321"))
+		clients.inMemory().withClient("angularapp").secret(passwordEncoder.encode("87654321"))
 		.scopes("read", "write")
 		.authorizedGrantTypes("password","refresh_token") //-- Aun. por password y refrescaremos el token
 		.accessTokenValiditySeconds(3600) //-- El tocken es valido por 1 hora
 		.refreshTokenValiditySeconds(3600) //-- Refresca el toquen cada 1 hora
 		.and()
-		.withClient("postman-app").secret(passwordEncoder.encode("123"))
+		.withClient("postmanapp").secret(passwordEncoder.encode("123"))
 		.scopes("read", "write")
 		.authorizedGrantTypes("password","refresh_token")
 		.accessTokenValiditySeconds(3600)
 		.refreshTokenValiditySeconds(3600);
 	}
 
-	//-- Esta configuración es para preprar la información a añadir al token
+	//-- Esta configuración es para preprar la información a añadir al token, importante si no te marca el error "unsupported_grant_type"
 	@Override
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 
-
+		endpoints.authenticationManager(this.authenticationManager)
+		.tokenStore(tokenStore())
+		.accessTokenConverter(accessTokenConverter()); //-- Añadimos la configuración para añadir mas info al token
 	}
 
 	

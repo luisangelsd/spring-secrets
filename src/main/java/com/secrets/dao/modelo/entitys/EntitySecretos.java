@@ -51,9 +51,6 @@ public class EntitySecretos implements Serializable{
 	
 
 
-
-
-
 	//** Getters and Setters
 	private static final long serialVersionUID = 1L;
 

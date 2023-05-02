@@ -48,7 +48,7 @@ public class EntityUsuario implements Serializable{
 	private String descripcionPerfil;
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinTable(name = "usuario_roles",
+	@JoinTable(name = "usuarios_roles",
 	joinColumns = @JoinColumn(name="usuario_id"),
 	inverseJoinColumns = @JoinColumn(name="rol_id"),
 	uniqueConstraints = {@UniqueConstraint(columnNames = {"usuario_id","rol_id"})})

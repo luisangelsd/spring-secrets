@@ -5,6 +5,8 @@ package com.secrets.dao.modelo.servicios;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,6 +23,8 @@ import com.secrets.dao.oauth2.entitys.EntityUsuario;
 @Service(value = "serviceOauth2Usuarios")
 public class ServiceOauth2Usuarios implements UserDetailsService {
 
+	private Logger logger= LoggerFactory.getLogger(UserDetailsService.class);
+	
 	//-- Inyeccion de servicios
 	@Autowired
 	private IServiceCrudRepositoryUsuarios serviceCrudUsuarios;
@@ -37,6 +41,7 @@ public class ServiceOauth2Usuarios implements UserDetailsService {
 		
 		//-- Validar que exista el usuario
 		if (entityUsuario==null) {
+			this.logger.error("El usuario no existe");
 			throw new UsernameNotFoundException("El usuario no existe");
 		}
 		
