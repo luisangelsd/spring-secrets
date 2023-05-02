@@ -1,8 +1,11 @@
 package com.secrets.dao.controladores;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -13,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,6 +33,7 @@ import com.secrets.dao.modelo.servicios.IServiceDaoSecrets;
 @RestController
 @RequestMapping()
 public class ControladorSecretos {
+	
 	
 	//-- Variables globales
 	Map<String, Object> response=new HashMap<>();
@@ -62,11 +65,11 @@ public class ControladorSecretos {
 			return new ResponseEntity<List<EntitySecretos>>(this.listaSecretos,HttpStatus.OK);			
 		}
 		catch (DataAccessException e) {
-			this.response.put("error", "DataAccessException: " + e.getMessage());
+			this.response.put("error", e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (Exception e) {
-			this.response.put("error", "Exception: "+e.getMessage());
+			this.response.put("error", e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -85,11 +88,11 @@ public class ControladorSecretos {
 			return new ResponseEntity<Page<EntitySecretos>>(this.pageListaSecretos,HttpStatus.OK);			
 		}
 		catch (DataAccessException e) {
-			this.response.put("error", "DataAccessException: " + e.getMessage());
+			this.response.put("error", e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (Exception e) {
-			this.response.put("error", "Exception: "+e.getMessage());
+			this.response.put("error", e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -112,11 +115,11 @@ public class ControladorSecretos {
 			
 		}
 		catch (DataAccessException e) {
-			this.response.put("error", "DataAccessException: " + e.getMessage());
+			this.response.put("error", e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (Exception e) {
-			this.response.put("error", "Exception: "+e.getMessage());
+			this.response.put("error", e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -138,11 +141,11 @@ public class ControladorSecretos {
 			return new ResponseEntity<EntitySecretos>(this.secreto,HttpStatus.OK);
 		} 
 		catch (DataAccessException e) {
-			this.response.put("error", "DataAccessException: " + e.getMessage());
+			this.response.put("error",  e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (Exception e) {
-			this.response.put("error", "Exception: "+e.getMessage());
+			this.response.put("error", e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -156,9 +159,15 @@ public class ControladorSecretos {
 		
 		
 		if (resulValid.hasErrors()) {
-			this.response.put("error", "Datos invalidos y/o nulos");
+			List<String> listErrors=resulValid.getFieldErrors()
+					.stream()
+					.map(error -> error.getDefaultMessage())
+					.collect(Collectors.toList());
+			
+			this.response.put("error", listErrors);
 			return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.BAD_REQUEST);
 		}
+		
 		
 		try {
 			this.secreto=this.serviceDaoSecretos.guardar(entitySecreto);
@@ -166,11 +175,11 @@ public class ControladorSecretos {
 			
 		} 
 		catch (DataAccessException e) {
-			this.response.put("error", "DataAccessException: " + e.getMessage());
+			this.response.put("error", e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (Exception e) {
-			this.response.put("error", "Exception: "+e.getMessage());
+			this.response.put("error", e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 
@@ -182,10 +191,13 @@ public class ControladorSecretos {
 	@PutMapping("/editar/{id}")
 	public ResponseEntity<?> editarPorId(@Valid @PathVariable( name = "id", required = true) Long id, @RequestBody EntitySecretos entitySecretos, BindingResult resulValid){
 		
-
-		
 		if (resulValid.hasErrors()) {
-			this.response.put("error", "Datos invalidos y/o nulos");
+			List<String> listErrors=resulValid.getFieldErrors()
+					.stream()
+					.map(error -> error.getDefaultMessage())
+					.collect(Collectors.toList());
+			
+			this.response.put("error", listErrors);
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -200,6 +212,12 @@ public class ControladorSecretos {
 				return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.NOT_FOUND);
 			}
 			
+			/*-- Validar que solamente se pueda actualizar el secreto si pertenece a la misma fecha
+			if (!entitySecretoActualizar.getfCreacion().equals(new Date())) {
+				this.response.put("error", "Lo sentimos, este secreto no puede ser editaro, debido a que pertenece a una fecha diferente a la de hoy");
+				return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
+			}*/
+			
 			 entitySecretoActualizar.setSecreto(entitySecretos.getSecreto());
 			 entitySecretoActualizar.setCategoria(entitySecretos.getCategoria());
 			 this.secreto=this.serviceDaoSecretos.guardar(entitySecretoActualizar);
@@ -207,11 +225,11 @@ public class ControladorSecretos {
 			
 		} 
 		catch (DataAccessException e) {
-			this.response.put("error", "DataAccessException: " + e.getMessage());
+			this.response.put("error",  e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (Exception e) {
-			this.response.put("error", "Exception: "+e.getMessage());
+			this.response.put("error", e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -226,11 +244,20 @@ public class ControladorSecretos {
 		
 		try {
 			
-			boolean validarExiste=this.serviceDaoSecretos.existePorId(id);
+			this.secreto=this.serviceDaoSecretos.buscarPorId(id);
 			
-			if (!validarExiste) {
+			if (this.secreto==null) {
 				this.response.put("error", "No puedes eliminar este secreto porque no existe");
 				return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.NOT_FOUND);	
+			}
+			
+			//-- Validar que solamente se pueda eliminar el secreto si pertenece a la misma fecha
+			if (!this.secreto.getfCreacion().equals( LocalDate.now())) {
+				System.out.println("Fecha creacion: "+this.secreto.getfCreacion());
+				System.out.println("Fecha actual: "+LocalDate.now());
+				
+				this.response.put("error", "Lo sentimos, este secreto no puede ser eliminado, debido a que pertenece a una fecha diferente a la de hoy");
+				return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 			
 			this.serviceDaoSecretos.eliminarPorId(id);
@@ -238,11 +265,11 @@ public class ControladorSecretos {
 			
 		} 
 		catch (DataAccessException e) {
-			this.response.put("error", "DataAccessException: " + e.getMessage());
+			this.response.put("error",  e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		catch (Exception e) {
-			this.response.put("error", "Exception: "+e.getMessage());
+			this.response.put("error", e.getMessage());
 			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		

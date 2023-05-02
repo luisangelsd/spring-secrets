@@ -28,10 +28,14 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter  {
 		public void configure(HttpSecurity http) throws Exception {
 			http.authorizeRequests()
 			.antMatchers(HttpMethod.GET,"/listar").permitAll() //-- Si no se marca el metodo se le asignan todos
-			/*.antMatchers(HttpMethod.POST,"/api/save/**").permitAll()
-			.antMatchers(HttpMethod.GET,"/private/**").hasAnyRole("USER", "ADMIN")
-			.antMatchers(HttpMethod.POST,"/private/**").hasRole("ADMIN")
-			.antMatchers("/private/**").hasRole("ADMIN")*/					
+			.antMatchers(HttpMethod.GET,"/listar/page/**").permitAll()
+			.antMatchers(HttpMethod.GET,"/listar/**").permitAll()
+			.antMatchers(HttpMethod.GET,"/buscar/**").permitAll()
+			.antMatchers(HttpMethod.POST,"/guardar").permitAll()
+			.antMatchers(HttpMethod.DELETE,"/eliminar/**").permitAll()
+			.antMatchers(HttpMethod.PUT,"/editar/**").permitAll()
+			/*.antMatchers(HttpMethod.GET,"/private/**").hasAnyRole("USER", "ADMIN")
+			.antMatchers(HttpMethod.POST,"/private/**").hasRole("ADMIN")*/					
 			.anyRequest().authenticated()									//-- Indica que cualquier otra pagina no señalada arriba es privada
 			.and().cors().configurationSource(corsConfigurationSource());	//-- Enviamos la configuración de corts
 		}

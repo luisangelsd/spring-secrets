@@ -1,6 +1,7 @@
 package com.secrets.dao.modelo.entitys;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -13,9 +14,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.NonNull;
 
 @Entity()
 @Table(name = "secretos")
@@ -33,17 +36,17 @@ public class EntitySecretos implements Serializable{
 	private String categoria;
 	
 
+	
 	@Column(name = "fecha_creacion")
-	@Temporal(TemporalType.DATE)
 	@DateTimeFormat(pattern = "dd-MM-yyyy")
-	private Date fCreacion;
+	private LocalDate fCreacion;
 	
 	
 	//** Methods
 	
 	@PrePersist
 	private void prePersist() {
-		fCreacion=new Date();
+		fCreacion= LocalDate.now();
 	}
 	
 	public EntitySecretos() {}
@@ -60,8 +63,8 @@ public class EntitySecretos implements Serializable{
 	public void setSecreto(String secreto) {this.secreto = secreto;	}
 	public String getCategoria() {return categoria;	}
 	public void setCategoria(String categoria) {this.categoria = categoria;	}
-	public Date getfCreacion() {return fCreacion;	}
-	public void setfCreacion(Date fCreacion) {this.fCreacion = fCreacion;	}
+	public LocalDate getfCreacion() {return fCreacion;	}
+	public void setfCreacion(LocalDate fCreacion) {this.fCreacion = fCreacion;	}
 	
 	
 
