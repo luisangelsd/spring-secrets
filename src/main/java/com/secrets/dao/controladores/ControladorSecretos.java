@@ -246,7 +246,7 @@ public class ControladorSecretos {
 	@PutMapping("adm/editar/{id}")
 	public ResponseEntity<?> editarPorIdWhitAdmin(@Valid @PathVariable( name = "id", required = true) Long id, @RequestBody EntitySecretos entitySecretos, BindingResult resulValid){
 		
-		if (resulValid.hasErrors()) {
+		if (resulValid.hasErrors() && entitySecretos.getfCreacion()!=null) {
 			List<String> listErrors=resulValid.getFieldErrors()
 					.stream()
 					.map(error -> error.getDefaultMessage())

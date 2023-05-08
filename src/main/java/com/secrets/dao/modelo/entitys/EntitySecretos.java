@@ -2,7 +2,7 @@ package com.secrets.dao.modelo.entitys;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
+
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,14 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.lang.NonNull;
 
 @Entity()
 @Table(name = "secretos")
@@ -46,7 +41,8 @@ public class EntitySecretos implements Serializable{
 	
 	@PrePersist
 	private void prePersist() {
-		fCreacion= LocalDate.now();
+			fCreacion= LocalDate.now();
+		
 	}
 	
 	public EntitySecretos() {}
