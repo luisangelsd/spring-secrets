@@ -23,10 +23,6 @@ public interface IServiceCrudRepositoryUsuarios extends CrudRepository<EntityUsu
 	@Query(value = "UPDATE usuarios SET url_foto = :urlImagen WHERE username= :username", nativeQuery = true)
 	public void editarImagenUsuario(@Param(value = "username")String username, @Param(value = "urlImagen") String urlImagen)throws Exception;
 	
-	@Modifying
-	@Transactional
-	@Query(value = "UPDATE usuarios SET url_foto ='' WHERE username= :username", nativeQuery = true)
-	public void eliminarImagenUsuario( @Param(value = "username")String username)throws Exception;
 
 	
 

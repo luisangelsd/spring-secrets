@@ -36,10 +36,5 @@ public class ServicesUsuarios implements IServicesUsuarios{
 	}
 
 
-	@Override
-	public void eliminarFotoPorUsername(String username) throws Exception {
-		this.servicesCrud.eliminarImagenUsuario(username);
-		
-	}
 
 }

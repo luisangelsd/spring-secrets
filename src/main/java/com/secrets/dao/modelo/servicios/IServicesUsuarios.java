@@ -11,7 +11,6 @@ public interface IServicesUsuarios {
 	
 	//-- Metodos urlImagen para User
 	public void editarFotoPorUsername(String username, String urlFoto)throws Exception;
-	public void eliminarFotoPorUsername(String username) throws Exception;
 	
 
 
