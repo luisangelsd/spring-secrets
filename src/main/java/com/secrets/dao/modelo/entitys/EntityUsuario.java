@@ -1,4 +1,4 @@
-package com.secrets.dao.oauth2.entitys;
+package com.secrets.dao.modelo.entitys;
 
 import java.io.Serializable;
 import java.util.List;
@@ -44,8 +44,12 @@ public class EntityUsuario implements Serializable{
 	private Boolean enabled;
 	
 	@Column(name = "descripcion_perfil")
-	
 	private String descripcionPerfil;
+	
+	
+	@Column(name = "url_foto")
+	private String urlFoto;
+	
 	
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinTable(name = "usuarios_roles",
@@ -76,23 +80,36 @@ public class EntityUsuario implements Serializable{
 	public void setDescripcionPerfil(String descripcionPerfil) {this.descripcionPerfil = descripcionPerfil;	}
 	public List<EntityRol> getRoles() {	return roles;}
 	public void setRoles(List<EntityRol> roles) {	this.roles = roles;	}
+	public String getUrlFoto() {return urlFoto;}
+	public void setUrlFoto(String urlFoto) {this.urlFoto = urlFoto;	}
 
 	
+	
 	//-- Constructores
+	
+
+
+
+
+
 	public EntityUsuario(Integer id, @NotEmpty(message = "El username no puede estar vacio") String username,
 			@NotEmpty(message = "El Password no puede estar vacia") String password, Boolean enabled,
-			String descripcionPerfil, List<EntityRol> roles) {
+			String descripcionPerfil, String urlFoto, List<EntityRol> roles) {
 		super();
 		this.id = id;
 		this.username = username;
 		this.password = password;
 		this.enabled = enabled;
 		this.descripcionPerfil = descripcionPerfil;
+		this.urlFoto = urlFoto;
 		this.roles = roles;
 	}
-
+	
+	
 	public EntityUsuario() {
+		
 	}
+
 	
 	
 	

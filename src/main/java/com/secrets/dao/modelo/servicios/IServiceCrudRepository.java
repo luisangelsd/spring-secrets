@@ -1,4 +1,4 @@
-package com.secrets.dao.modelo.dao;
+package com.secrets.dao.modelo.servicios;
 
 import java.util.List;
 

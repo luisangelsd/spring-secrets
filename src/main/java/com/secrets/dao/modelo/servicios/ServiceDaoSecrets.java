@@ -9,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.secrets.dao.modelo.dao.IServiceCrudRepository;
 import com.secrets.dao.modelo.entitys.EntitySecretos;
 
 @Service(value = "seerviceDaoSecrets")

@@ -1,4 +1,4 @@
-package com.secrets.dao.oauth2.entitys;
+package com.secrets.dao.modelo.entitys;
 
 import java.io.Serializable;
 
