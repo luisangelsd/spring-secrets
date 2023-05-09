@@ -1,6 +1,7 @@
 package com.secrets.dao.controladores;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,15 +41,18 @@ public class ControladorUsuarios {
 	
 	
 	//Endpoint: Upload Imagen
-	@PostMapping("upload/")
+	@PostMapping("/imagen-perfil/upload/")
 	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	public ResponseEntity<?> editarImagen(@RequestParam(name = "archivo") MultipartFile archivo, @RequestParam(name = "username") String username){
 		
-		String nombreArchivo="";
-		Path rutaSave= null;
+
 		
 		
 		try {
+			
+			String nombreArchivo=archivo.getOriginalFilename();												 //-- Obtenemos nombre archivo y lo modificamos
+			Path ruta= Paths.get("simulador-servidor-storage").resolve(nombreArchivo).toAbsolutePath();		 //-- Armamos la ruta de la imagen subida para despues validar si existe y eliminarla
+			
 			
 			
 			//-- Validar cliente
@@ -59,15 +63,23 @@ public class ControladorUsuarios {
 			}
 			
 			
+			//-- Si tiene otra foto establecida por defecto la eliminamos
+			if (!this.entityUsuario.getUrlFoto().equalsIgnoreCase("mi-perfil.png")) {
+				Path rutaAnterior=Paths.get("simulador-servidor-storage").resolve(this.entityUsuario.getUrlFoto()).toAbsolutePath(); //-- Amamos rura anterior
+				Files.deleteIfExists(rutaAnterior);																				     //-- Eliminamos si existe
+			}
+			
+			
+			
+			
 			//-- Validamos que la imagen no este vacia y guardamos
 			if (!archivo.isEmpty()) {
-				 nombreArchivo=random.nextInt(100)+"-"+archivo.getOriginalFilename();						//-- Obtenemos nombre archivo
-				 rutaSave= Paths.get("simulador-servidor-storage").resolve(nombreArchivo).toAbsolutePath();		 //-- Armamos nuestra ruta completa donde estara guardada
+				nombreArchivo=random.nextInt(9000)+"-"+archivo.getOriginalFilename();							//-- Creamos el nuevo nombre del archivo
+				ruta= Paths.get("simulador-servidor-storage").resolve(nombreArchivo).toAbsolutePath(); 			//--  Creamos el nuevo Path completo
+				Files.copy(archivo.getInputStream(), ruta);														//-- Guarda la imagen en la ruta	
+				this.serviciosUsuarios.editarFotoPorUsername(username, nombreArchivo); 							//-- Actualizamos registro en la bd 	
 			}	
 			
-
-			Files.copy(archivo.getInputStream(), rutaSave);														//-- Guarda la imagen en la ruta			
-			this.serviciosUsuarios.editarFotoPorUsername(username, nombreArchivo); 								//-- Actualizamos registro en la bd 	
 			
 			return new ResponseEntity<>(HttpStatus.OK);
 			

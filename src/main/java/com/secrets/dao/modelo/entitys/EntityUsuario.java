@@ -64,7 +64,9 @@ public class EntityUsuario implements Serializable{
 	private void datosPorDefecto() {
 		this.enabled=true;
 		this.descripcionPerfil="Sin descripción aún";
+		this.urlFoto="mi-perfil.png";
 	}
+
 
 	
 	//-- Getters and setters
