@@ -47,7 +47,7 @@ public class EntityUsuario implements Serializable{
 	private String descripcionPerfil;
 	
 	
-	@Column(name = "url_foto")
+	@Column(name = "url_foto", unique = true)
 	private String urlFoto;
 	
 	

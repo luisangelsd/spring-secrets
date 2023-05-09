@@ -1,8 +1,7 @@
 package com.secrets.dao.controladores;
 
 
-import java.io.File;
-import java.io.IOException;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,8 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,7 +41,32 @@ public class ControladorUsuarios {
 	private IServicesUsuarios serviciosUsuarios;
 	
 	
-	
+	@Secured({"ROLE_ADMIN","ROLE_USER"})
+	@GetMapping("ver/usuario/{username}")
+	public ResponseEntity<?> verUsuario(@PathVariable(name = "username")String username){
+		
+		
+		try {
+			
+			//-- Validar que el usuario exista
+			this.entityUsuario=this.serviciosUsuarios.buscarUserPorUsername(username);
+			if (this.entityUsuario==null) {
+				this.response.put("error", "El usuario no existe");
+				return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			
+			
+			//-- Regresar respuesta
+			this.entityUsuario.setPassword("");
+			return new ResponseEntity<EntityUsuario>(this.entityUsuario, HttpStatus.OK);
+
+		} catch (Exception e) {
+			this.response.put("error", e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		
+	}
 	
 	
 	//Endpoint: Upload Imagen
