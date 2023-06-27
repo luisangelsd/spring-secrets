@@ -34,6 +34,10 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter  {
 			.antMatchers(HttpMethod.POST,"/guardar").permitAll()
 			.antMatchers(HttpMethod.DELETE,"/eliminar/**").permitAll()
 			.antMatchers(HttpMethod.PUT,"/editar/**").permitAll()
+			.antMatchers(HttpMethod.GET,"/adm/imagen-perfil/show/**").permitAll()
+			.antMatchers("/v3/api-docs/**").permitAll()
+			.antMatchers("/swagger-ui/**").permitAll()
+			.antMatchers("/h2-console/**").permitAll()
 			/*.antMatchers(HttpMethod.GET,"/private/**").hasAnyRole("USER", "ADMIN")
 			.antMatchers(HttpMethod.POST,"/private/**").hasRole("ADMIN")*/					
 			.anyRequest().authenticated()									//-- Indica que cualquier otra pagina no señalada arriba es privada
