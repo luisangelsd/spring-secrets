@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.secrets.dao.modelo.entitys.EntitySecretos;
 
-@Service(value = "seerviceDaoSecrets")
+@Service(value = "serviceDaoSecrets")
 public class ServiceDaoSecrets implements IServiceDaoSecrets{
 	
 	
@@ -22,35 +22,34 @@ public class ServiceDaoSecrets implements IServiceDaoSecrets{
 	
 	
 	@Override
-	public List<EntitySecretos> listarTodos() throws DataAccessException {
-		
-		return (List<EntitySecretos>) serviceCrudRepository.findAll() ;
+	public List<EntitySecretos> listarTodos(){
+		return (List<EntitySecretos>) serviceCrudRepository.findAll();
 	}
 
 	@Override
-	public List<EntitySecretos> listarPorCategoria(String categoria) throws DataAccessException {	
+	public List<EntitySecretos> listarPorCategoria(String categoria) {	
 		return serviceCrudRepository.faindByCategory(categoria);
 	}
 
 	
 	@Override
-	public EntitySecretos buscarPorId(Long id) throws DataAccessException {
+	public EntitySecretos buscarPorId(Long id) {
 		return serviceCrudRepository.findById(id).orElse(null);
 	}
 	
 
 	@Override
-	public EntitySecretos guardar(EntitySecretos entitySecretos) throws DataAccessException {	
+	public EntitySecretos guardar(EntitySecretos entitySecretos) {	
 		return serviceCrudRepository.save(entitySecretos);
 	}
 
 	@Override
-	public void eliminarPorId(Long id) throws DataAccessException {
-		serviceCrudRepository.deleteById(id);;
+	public void eliminarPorId(Long id) {
+		serviceCrudRepository.deleteById(id);
 	}
 
 	@Override
-	public Boolean existePorId(Long id) throws DataAccessException {		
+	public Boolean existePorId(Long id) {		
 		return serviceCrudRepository.existsById(id);
 	}
 
@@ -58,7 +57,7 @@ public class ServiceDaoSecrets implements IServiceDaoSecrets{
 	//-- Metodo: Paginado de todos los registros
 	@Override
 	@Transactional(readOnly = true)
-	public Page<EntitySecretos> paginado(Pageable pageable) throws DataAccessException {
+	public Page<EntitySecretos> paginado(Pageable pageable) {
 		return this.serviceCrudRepository.findAll(pageable);
 	}
 

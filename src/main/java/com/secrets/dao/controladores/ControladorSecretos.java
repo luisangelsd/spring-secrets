@@ -1,26 +1,17 @@
 package com.secrets.dao.controladores;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
-
 import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,11 +20,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.secrets.dao.modelo.entitys.EntitySecretos;
+import com.secrets.dao.modelo.excepciones.RunTimeSecretNotFound;
 import com.secrets.dao.modelo.servicios.IServiceDaoSecrets;
 
 @CrossOrigin({"*"})
@@ -51,324 +42,201 @@ public class ControladorSecretos {
 	
 	//-- Inyeccion de servicios
 	@Autowired
-	@Qualifier(value = "seerviceDaoSecrets")
+	@Qualifier(value = "serviceDaoSecrets")
 	public IServiceDaoSecrets serviceDaoSecretos;
 	
 	
-	// Method List
+	
+	// Method: List All
 	@GetMapping("/listar")
-	public ResponseEntity<?> listar(){
-		
-		
-		try {
+	@ResponseStatus(HttpStatus.OK)
+	public List<EntitySecretos> listar(){
+	
+			//-- Servicio: Obtener Data
+			this.listaSecretos= this.serviceDaoSecretos.listarTodos();
 			
-			this.listaSecretos=this.serviceDaoSecretos.listarTodos();
-			
-			if (this.listaSecretos.isEmpty() || this.listaSecretos ==null) {
-				this.response.put("error", "No se han encontrado registros");
-				return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.NOT_FOUND);
+			//-- Response: Enviar Lista vacia si no se encuentra registros
+			if (this.listaSecretos == null) {
+				this.listaSecretos=new ArrayList<>();
+				return this.listaSecretos;
 			}
-			
-			return new ResponseEntity<List<EntitySecretos>>(this.listaSecretos,HttpStatus.OK);			
-		}
-		catch (DataAccessException e) {
-			this.response.put("error", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		catch (Exception e) {
-			this.response.put("error", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
 		
-		
-	}//end
+			//-- Response: Enviar Registros
+			return this.listaSecretos;					
+	}
 	
 	 
-	// Method List page
+	// Method: List Page
 	@GetMapping("/listar/page/{page}/elements/{elements}")
-	public ResponseEntity<?> paginado(@PathVariable(name = "page", required = true) Integer page, @PathVariable(name = "elements", required = true) Integer elements){
-		
-		
-		try {
+	@ResponseStatus(HttpStatus.OK)
+	public Page<EntitySecretos> paginado(@PathVariable(name = "page", required = true) Integer page, @PathVariable(name = "elements", required = true) Integer elements){
 			
+		//-- Servicio: Obtener Data
 			this.pageListaSecretos=this.serviceDaoSecretos.paginado(PageRequest.of(page,elements));	
-			return new ResponseEntity<Page<EntitySecretos>>(this.pageListaSecretos,HttpStatus.OK);			
-		}
-		catch (DataAccessException e) {
-			this.response.put("error", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		catch (Exception e) {
-			this.response.put("error", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		
-	}//end
+			
+		//-- Response: Enviar Respuesta
+			return this.pageListaSecretos;					
+	}
 	
 	
-	// Method List by Category
+	
+	// Method: List by Category
 	@GetMapping("/listar/{categoria}")
-	public ResponseEntity<?> listarPorCategoria(@PathVariable(name = "categoria", required = true) String categoria){
-		
-		try {
+	@ResponseStatus(HttpStatus.OK)
+	public List<EntitySecretos> listarPorCategoria(@PathVariable(name = "categoria", required = true) String categoria){
+
+			//-- Service:
 			this.listaSecretos=this.serviceDaoSecretos.listarPorCategoria(categoria);
 			
-			if (this.listaSecretos.isEmpty() || this.listaSecretos ==null) {
-				this.response.put("error", "No se encontraron registros");
-				return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.NOT_FOUND);
+			//-- Response: Validar que no este vacio
+			if ( this.listaSecretos == null) {
+				this.listaSecretos=new ArrayList<>();
+				return this.listaSecretos;
 			}
 			
-			return new ResponseEntity<List<EntitySecretos>>(this.listaSecretos,HttpStatus.OK);
-			
-		}
-		catch (DataAccessException e) {
-			this.response.put("error", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		catch (Exception e) {
-			this.response.put("error", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+			//-- Response: Enviar Lista 
+			return this.listaSecretos;	
 		
-	}//end
+	}
 	
 	
 	
 	// Method Search by ID
 	@GetMapping("buscar/{id}")
-	public ResponseEntity<?> buscarPorId(@PathVariable(name = "id", required = true)Long id){
+	@ResponseStatus(HttpStatus.OK)
+	public EntitySecretos buscarPorId(@PathVariable(name = "id", required = true)Long id){
 		
-		try {
+		//-- Service:
 			this.secreto=this.serviceDaoSecretos.buscarPorId(id);
-			if (this.secreto==null) {
-				response.put("error", "El secreto no existe");
-				return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
-			}
 			
-			return new ResponseEntity<EntitySecretos>(this.secreto,HttpStatus.OK);
-		} 
-		catch (DataAccessException e) {
-			this.response.put("error",  e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
+		//-- Valid: Que no este vacio
+		if (this.secreto == null) {
+			throw new RunTimeSecretNotFound("¡El secreto no existe!");
 		}
-		catch (Exception e) {
-			this.response.put("error", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		
+			
+		//-- Response
+		return this.secreto;
 	}
 	
 	
 	
 	//Method Save 
 	@PostMapping("/guardar")
-	public ResponseEntity<?> guardar(@Valid @RequestBody EntitySecretos entitySecreto, BindingResult resulValid) {	
-		
-		
-		if (resulValid.hasErrors()) {
-			List<String> listErrors=resulValid.getFieldErrors()
-					.stream()
-					.map(error -> error.getDefaultMessage())
-					.collect(Collectors.toList());
+	@ResponseStatus(HttpStatus.OK)
+	public EntitySecretos guardar(@Valid @RequestBody EntitySecretos entitySecreto) {	
 			
-			this.response.put("error", listErrors);
-			return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.BAD_REQUEST);
-		}
-		
-		
-		try {
+		//-- Servicio
 			this.secreto=this.serviceDaoSecretos.guardar(entitySecreto);
-			return new ResponseEntity<EntitySecretos>(this.secreto,HttpStatus.CREATED);
+		//-- Response
+			return this.secreto;
 			
-		} 
-		catch (DataAccessException e) {
-			this.response.put("error", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		catch (Exception e) {
-			this.response.put("error", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-
-	}//end
+	}
 	
 	
 	
 	//Method Update
 	@PutMapping("/editar/{id}")
-	public ResponseEntity<?> editarPorId(@Valid @PathVariable( name = "id", required = true) Long id, @RequestBody EntitySecretos entitySecretos, BindingResult resulValid){
+	@ResponseStatus(HttpStatus.OK)
+	public EntitySecretos editarPorId(@Valid @RequestBody EntitySecretos entitySecretos, @PathVariable( name = "id", required = true) Long id){
 		
-		if (resulValid.hasErrors()) {
-			List<String> listErrors=resulValid.getFieldErrors()
-					.stream()
-					.map(error -> error.getDefaultMessage())
-					.collect(Collectors.toList());
-			
-			this.response.put("error", listErrors);
-			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		
-		
-		
-		try {
+	
+		//-- Servicio: Buscar Secreto
 			EntitySecretos entitySecretoActualizar=this.serviceDaoSecretos.buscarPorId(id);
-			
-			
-			if (entitySecretoActualizar==null) {
-				this.response.put("error", "El secreto no puede ser editado porque no existe");
-				return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.NOT_FOUND);
+		
+		//-- Validar: Que exista el secreto
+			if (entitySecretoActualizar == null) {
+				throw new RunTimeSecretNotFound("El secreto no puede ser editado porque no existe");
 			}
 			
-			//-- Validar que solamente se pueda editar el secreto si pertenece a la misma fecha
+			//-- Validar: Solamente se pueda editar el secreto si pertenece a la misma fecha
 			if (!this.secreto.getfCreacion().equals( LocalDate.now())) {
-				System.out.println("Fecha creacion: "+this.secreto.getfCreacion());
-				System.out.println("Fecha actual: "+LocalDate.now());
-				
-				this.response.put("error", "Lo sentimos, este secreto no puede ser eliminado, debido a que pertenece a una fecha diferente a la de hoy");
-				return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
+				throw new RuntimeException("Lo sentimos, este secreto no puede ser eliminado, debido a que pertenece a una fecha diferente a la de hoy");
 			}
 			
-			
+			//-- Servicio: Editar
 			 entitySecretoActualizar.setSecreto(entitySecretos.getSecreto());
 			 entitySecretoActualizar.setCategoria(entitySecretos.getCategoria());
 			 this.secreto=this.serviceDaoSecretos.guardar(entitySecretoActualizar);
-			 return new ResponseEntity<EntitySecretos>(this.secreto,HttpStatus.OK);
-			
-		} 
-		catch (DataAccessException e) {
-			this.response.put("error",  e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		catch (Exception e) {
-			this.response.put("error", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		
-	}//end
+			 return this.secreto;
+	
+	}
+	
 	
 	
 	//Method Update whit Admin
 	@Secured({"ROLE_ADMIN"})
 	@PutMapping("adm/editar/{id}")
-	public ResponseEntity<?> editarPorIdWhitAdmin(@Valid @PathVariable( name = "id", required = true) Long id, @RequestBody EntitySecretos entitySecretos, BindingResult resulValid){
+	@ResponseStatus(HttpStatus.OK)
+	public EntitySecretos editarPorIdWhitAdmin(@Valid @RequestBody EntitySecretos entitySecretos, @PathVariable( name = "id", required = true) Long id){
 		
-		if (resulValid.hasErrors() && entitySecretos.getfCreacion()!=null) {
-			List<String> listErrors=resulValid.getFieldErrors()
-					.stream()
-					.map(error -> error.getDefaultMessage())
-					.collect(Collectors.toList());
-			
-			this.response.put("error", listErrors);
-			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		
-		
-		
-		try {
+			//-- Servicio: Buscar por id
 			EntitySecretos entitySecretoActualizar=this.serviceDaoSecretos.buscarPorId(id);
 			
-			
-			if (entitySecretoActualizar==null) {
-				this.response.put("error", "El secreto no puede ser editado porque no existe");
-				return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.NOT_FOUND);
+			//-- Validar: Que exista 
+			if (entitySecretoActualizar == null) {
+				throw new RunTimeSecretNotFound("El secreto no puede ser editado porque no existe");
 			}
 			
 			
-			
+			//-- Servicio: Actualizar
 			 entitySecretoActualizar.setSecreto(entitySecretos.getSecreto());
 			 entitySecretoActualizar.setCategoria(entitySecretos.getCategoria());
 			 if (entitySecretos.getfCreacion()!=null) { //-- Si el Post contiene una fecha la agregamos, si no dejamos la que esta por defecto
 				entitySecretoActualizar.setfCreacion(entitySecretos.getfCreacion());
 			}
 			
-			 
-			 this.secreto=this.serviceDaoSecretos.guardar(entitySecretoActualizar);
-			 return new ResponseEntity<EntitySecretos>(this.secreto,HttpStatus.OK);
-			
-		} 
-		catch (DataAccessException e) {
-			this.response.put("error",  e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		catch (Exception e) {
-			this.response.put("error", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		
-	}//end
+			 //-- Response
+			 this.secreto = this.serviceDaoSecretos.guardar(entitySecretoActualizar);
+			 return this.secreto;
+	
+	}
 
 
 	//Method Delate
 	@DeleteMapping("eliminar/{id}")
-	public ResponseEntity<?> eliminarPorId(@PathVariable(name = "id", required = true) Long id){
+	@ResponseStatus(HttpStatus.OK)
+	public EntitySecretos eliminarPorId(@PathVariable(name = "id", required = true) Long id){
 		
-		
-		
-		try {
-			
+			//-- Servicio: Buscar Secreto
 			this.secreto=this.serviceDaoSecretos.buscarPorId(id);
 			
+			//-- Validar: Que exista
 			if (this.secreto==null) {
-				this.response.put("error", "No puedes eliminar este secreto porque no existe");
-				return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.NOT_FOUND);	
+				throw new RunTimeSecretNotFound("No puedes eliminar este secreto porque no existe");
 			}
 			
 			//-- Validar que solamente se pueda eliminar el secreto si pertenece a la misma fecha
-			if (!this.secreto.getfCreacion().equals( LocalDate.now())) {
-				System.out.println("Fecha creacion: "+this.secreto.getfCreacion());
-				System.out.println("Fecha actual: "+LocalDate.now());
-				
-				this.response.put("error", "Lo sentimos, este secreto no puede ser eliminado, debido a que pertenece a una fecha diferente a la de hoy");
-				return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
+			if (!this.secreto.getfCreacion().equals( LocalDate.now())) {		
+				throw new RuntimeException("Lo sentimos, este secreto no puede ser eliminado, debido a que pertenece a una fecha diferente a la de hoy");
 			}
 			
 			this.serviceDaoSecretos.eliminarPorId(id);
-			return new ResponseEntity<>(HttpStatus.OK);
-			
-		} 
-		catch (DataAccessException e) {
-			this.response.put("error",  e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		catch (Exception e) {
-			this.response.put("error", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+			return this.secreto;
+
 		
-	}//end
+	}
 	
 	
 	//Method Delate como admin
 		@Secured({"ROLE_ADMIN"})
 		@DeleteMapping("adm/eliminar/{id}")
-		public ResponseEntity<?> eliminarPorIdWhirAdmin(@PathVariable(name = "id", required = true) Long id){
+		@ResponseStatus(HttpStatus.OK)
+		public EntitySecretos eliminarPorIdWhirAdmin(@PathVariable(name = "id", required = true) Long id){
 			
-			
-			
-			try {
+
+			//-- Servicio: Buscar Secreto
+			this.secreto=this.serviceDaoSecretos.buscarPorId(id);
 				
-				this.secreto=this.serviceDaoSecretos.buscarPorId(id);
-				
-				if (this.secreto==null) {
-					this.response.put("error", "No puedes eliminar este secreto porque no existe");
-					return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.NOT_FOUND);	
-				}
-				
-				
-				this.serviceDaoSecretos.eliminarPorId(id);
-				return new ResponseEntity<>(HttpStatus.OK);
-				
-			} 
-			catch (DataAccessException e) {
-				this.response.put("error",  e.getMessage());
-				return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
+			//-- Validar: Que exista
+			if (this.secreto == null) {
+					throw new RunTimeSecretNotFound("No puedes eliminar este secreto porque no existe");
 			}
-			catch (Exception e) {
-				this.response.put("error", e.getMessage());
-				return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-			
-		}//end
+				
+			//-- Servicio: Eliminar
+			this.serviceDaoSecretos.eliminarPorId(id);
+			return this.secreto;
+
+		}
 	
 		
 	
