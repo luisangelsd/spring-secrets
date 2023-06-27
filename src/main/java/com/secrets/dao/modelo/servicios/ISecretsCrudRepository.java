@@ -6,16 +6,16 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
+import com.secrets.dao.modelo.entitys.EntitySecreto;
 
-import com.secrets.dao.modelo.entitys.EntitySecretos;
-
-
-public interface IServiceCrudRepository extends JpaRepository<EntitySecretos, Long>{
+@Repository
+public interface ISecretsCrudRepository extends JpaRepository<EntitySecreto, Long>{
 	
-	//-- Metodo: Buscar por categoria
+	//-- Buscar por categoria
 	@Query(value = "SELECT * FROM secretos u  WHERE u.categoria=:categoria", nativeQuery = true)
-	public List<EntitySecretos> faindByCategory(@Param("categoria") String categoria);
+	public List<EntitySecreto> faindByCategory(@Param("categoria") String categoria);
 
 
 }

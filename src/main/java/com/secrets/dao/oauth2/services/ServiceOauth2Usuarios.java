@@ -1,4 +1,4 @@
-package com.secrets.dao.modelo.servicios;
+package com.secrets.dao.oauth2.services;
 
 
 
@@ -17,7 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.secrets.dao.modelo.entitys.EntityUsuario;
+import com.secrets.dao.oauth2.services.entitys.EntityUsuario;
 
 
 @Service(value = "serviceOauth2Usuarios")

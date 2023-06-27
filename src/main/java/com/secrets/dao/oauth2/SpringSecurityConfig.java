@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.secrets.dao.modelo.servicios.ServiceOauth2Usuarios;
+import com.secrets.dao.oauth2.services.ServiceOauth2Usuarios;
 
 
 @EnableGlobalMethodSecurity(securedEnabled = true)

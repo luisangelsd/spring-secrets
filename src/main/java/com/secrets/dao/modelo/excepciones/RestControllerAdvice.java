@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @org.springframework.web.bind.annotation.RestControllerAdvice
 public class RestControllerAdvice {
 	
-	//-- Vaariables Globales
+	//-- Variables Globales
 	Map<String, Object> errors;
 	Map<String, Object> responseBody;
 	
+	
+	
+	//--------------------------------------------------------------------------
 	
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -37,13 +40,12 @@ public class RestControllerAdvice {
         this.responseBody.put("errors", errors);
 		this.responseBody.put("timestamp", LocalDateTime.now());
 		this.responseBody.put("code", e.hashCode());
-		this.responseBody.put("send", "RestControllerAdvice");
-		
-		//-- Enviando ResponseBody
+		this.responseBody.put("send", "RestControllerAdvice");	
         return  this.responseBody;
     }
 	
-	
+  //--------------------------------------------------------------------------
+    
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler(RunTimeSecretNotFound.class)
 	public Map<String, Object> runTimeSecretNotFound(RunTimeSecretNotFound e){
@@ -61,10 +63,10 @@ public class RestControllerAdvice {
 		this.responseBody.put("code", e.hashCode());
 		this.responseBody.put("send", "RestControllerAdvice");
 		
-		//-- Enviando ResponseBody
 		return this.responseBody;
 	}
-	
+
+	//--------------------------------------------------------------------------
 	
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(RuntimeException.class)
@@ -83,10 +85,10 @@ public class RestControllerAdvice {
 		this.responseBody.put("code", e.hashCode());
 		this.responseBody.put("send", "RestControllerAdvice");
 		
-		//-- Enviando ResponseBody
 		return this.responseBody;
 	}
 	
+	//--------------------------------------------------------------------------
 	
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
@@ -105,7 +107,6 @@ public class RestControllerAdvice {
 		this.responseBody.put("code", e.hashCode());
 		this.responseBody.put("send", "RestControllerAdvice");
 		
-		//-- Enviando ResponseBody
 		return this.responseBody;
 	}
 

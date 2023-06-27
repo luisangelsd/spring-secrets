@@ -1,4 +1,4 @@
-package com.secrets.dao.modelo.entitys;
+package com.secrets.dao.oauth2.services.entitys;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,6 +1,6 @@
-package com.secrets.dao.modelo.servicios;
+package com.secrets.dao.oauth2.services;
 
-import com.secrets.dao.modelo.entitys.EntityUsuario;
+import com.secrets.dao.oauth2.services.entitys.EntityUsuario;
 
 public interface IServicesUsuarios {
 	

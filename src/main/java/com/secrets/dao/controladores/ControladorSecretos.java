@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.secrets.dao.modelo.entitys.EntitySecretos;
+import com.secrets.dao.modelo.entitys.EntitySecreto;
 import com.secrets.dao.modelo.excepciones.RunTimeSecretNotFound;
-import com.secrets.dao.modelo.servicios.IServiceDaoSecrets;
+import com.secrets.dao.modelo.servicios.IServicesSecrets;
 
 @CrossOrigin({"*"})
 @RestController
@@ -35,22 +35,22 @@ public class ControladorSecretos {
 	
 	//-- Variables globales
 	Map<String, Object> response=new HashMap<>();
-	List<EntitySecretos> listaSecretos=null;
-	EntitySecretos secreto=null;
-	Page<EntitySecretos> pageListaSecretos=null;
+	List<EntitySecreto> listaSecretos=null;
+	EntitySecreto secreto=null;
+	Page<EntitySecreto> pageListaSecretos=null;
 	
 	
 	//-- Inyeccion de servicios
 	@Autowired
 	@Qualifier(value = "serviceDaoSecrets")
-	public IServiceDaoSecrets serviceDaoSecretos;
+	public IServicesSecrets serviceDaoSecretos;
 	
-	
+	//--------------------------------------------------------------------------
 	
 	// Method: List All
 	@GetMapping("/listar")
 	@ResponseStatus(HttpStatus.OK)
-	public List<EntitySecretos> listar(){
+	public List<EntitySecreto> listar(){
 	
 			//-- Servicio: Obtener Data
 			this.listaSecretos= this.serviceDaoSecretos.listarTodos();
@@ -65,11 +65,12 @@ public class ControladorSecretos {
 			return this.listaSecretos;					
 	}
 	
-	 
+	//--------------------------------------------------------------------------
+	
 	// Method: List Page
 	@GetMapping("/listar/page/{page}/elements/{elements}")
 	@ResponseStatus(HttpStatus.OK)
-	public Page<EntitySecretos> paginado(@PathVariable(name = "page", required = true) Integer page, @PathVariable(name = "elements", required = true) Integer elements){
+	public Page<EntitySecreto> paginado(@PathVariable(name = "page", required = true) Integer page, @PathVariable(name = "elements", required = true) Integer elements){
 			
 		//-- Servicio: Obtener Data
 			this.pageListaSecretos=this.serviceDaoSecretos.paginado(PageRequest.of(page,elements));	
@@ -78,12 +79,13 @@ public class ControladorSecretos {
 			return this.pageListaSecretos;					
 	}
 	
-	
+
+	//--------------------------------------------------------------------------
 	
 	// Method: List by Category
 	@GetMapping("/listar/{categoria}")
 	@ResponseStatus(HttpStatus.OK)
-	public List<EntitySecretos> listarPorCategoria(@PathVariable(name = "categoria", required = true) String categoria){
+	public List<EntitySecreto> listarPorCategoria(@PathVariable(name = "categoria", required = true) String categoria){
 
 			//-- Service:
 			this.listaSecretos=this.serviceDaoSecretos.listarPorCategoria(categoria);
@@ -99,12 +101,13 @@ public class ControladorSecretos {
 		
 	}
 	
+	//--------------------------------------------------------------------------
 	
 	
 	// Method Search by ID
 	@GetMapping("buscar/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public EntitySecretos buscarPorId(@PathVariable(name = "id", required = true)Long id){
+	public EntitySecreto buscarPorId(@PathVariable(name = "id", required = true)Long id){
 		
 		//-- Service:
 			this.secreto=this.serviceDaoSecretos.buscarPorId(id);
@@ -118,12 +121,13 @@ public class ControladorSecretos {
 		return this.secreto;
 	}
 	
+	//--------------------------------------------------------------------------
 	
 	
 	//Method Save 
 	@PostMapping("/guardar")
 	@ResponseStatus(HttpStatus.OK)
-	public EntitySecretos guardar(@Valid @RequestBody EntitySecretos entitySecreto) {	
+	public EntitySecreto guardar(@Valid @RequestBody EntitySecreto entitySecreto) {	
 			
 		//-- Servicio
 			this.secreto=this.serviceDaoSecretos.guardar(entitySecreto);
@@ -133,15 +137,17 @@ public class ControladorSecretos {
 	}
 	
 	
+	//--------------------------------------------------------------------------
 	
-	//Method Update
+	
+	/* Method Update
 	@PutMapping("/editar/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public EntitySecretos editarPorId(@Valid @RequestBody EntitySecretos entitySecretos, @PathVariable( name = "id", required = true) Long id){
+	public EntitySecreto editarPorId(@Valid @RequestBody EntitySecreto entitySecretos, @PathVariable( name = "id", required = true) Long id){
 		
 	
 		//-- Servicio: Buscar Secreto
-			EntitySecretos entitySecretoActualizar=this.serviceDaoSecretos.buscarPorId(id);
+			EntitySecreto entitySecretoActualizar=this.serviceDaoSecretos.buscarPorId(id);
 		
 		//-- Validar: Que exista el secreto
 			if (entitySecretoActualizar == null) {
@@ -159,18 +165,20 @@ public class ControladorSecretos {
 			 this.secreto=this.serviceDaoSecretos.guardar(entitySecretoActualizar);
 			 return this.secreto;
 	
-	}
+	}*/
 	
 	
+	//--------------------------------------------------------------------------
 	
-	//Method Update whit Admin
+	
+	/* Method Update whit Admin
 	@Secured({"ROLE_ADMIN"})
 	@PutMapping("adm/editar/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public EntitySecretos editarPorIdWhitAdmin(@Valid @RequestBody EntitySecretos entitySecretos, @PathVariable( name = "id", required = true) Long id){
+	public EntitySecreto editarPorIdWhitAdmin(@Valid @RequestBody EntitySecreto entitySecretos, @PathVariable( name = "id", required = true) Long id){
 		
 			//-- Servicio: Buscar por id
-			EntitySecretos entitySecretoActualizar=this.serviceDaoSecretos.buscarPorId(id);
+			EntitySecreto entitySecretoActualizar=this.serviceDaoSecretos.buscarPorId(id);
 			
 			//-- Validar: Que exista 
 			if (entitySecretoActualizar == null) {
@@ -189,13 +197,15 @@ public class ControladorSecretos {
 			 this.secreto = this.serviceDaoSecretos.guardar(entitySecretoActualizar);
 			 return this.secreto;
 	
-	}
+	}*/
+	
+	//--------------------------------------------------------------------------
 
-
+	
 	//Method Delate
 	@DeleteMapping("eliminar/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public EntitySecretos eliminarPorId(@PathVariable(name = "id", required = true) Long id){
+	public EntitySecreto eliminarPorId(@PathVariable(name = "id", required = true) Long id){
 		
 			//-- Servicio: Buscar Secreto
 			this.secreto=this.serviceDaoSecretos.buscarPorId(id);
@@ -217,11 +227,14 @@ public class ControladorSecretos {
 	}
 	
 	
+	//--------------------------------------------------------------------------
+	
+	
 	//Method Delate como admin
 		@Secured({"ROLE_ADMIN"})
 		@DeleteMapping("adm/eliminar/{id}")
 		@ResponseStatus(HttpStatus.OK)
-		public EntitySecretos eliminarPorIdWhirAdmin(@PathVariable(name = "id", required = true) Long id){
+		public EntitySecreto eliminarPorIdWhirAdmin(@PathVariable(name = "id", required = true) Long id){
 			
 
 			//-- Servicio: Buscar Secreto
@@ -238,10 +251,7 @@ public class ControladorSecretos {
 
 		}
 	
-		
 	
-		
-		
 }
 
 

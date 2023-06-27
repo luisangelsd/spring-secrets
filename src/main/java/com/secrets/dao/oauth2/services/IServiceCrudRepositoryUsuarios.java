@@ -1,4 +1,4 @@
-package com.secrets.dao.modelo.servicios;
+package com.secrets.dao.oauth2.services;
 
 import javax.transaction.Transactional;
 
@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import com.secrets.dao.modelo.entitys.EntityUsuario;
+import com.secrets.dao.oauth2.services.entitys.EntityUsuario;
 
 public interface IServiceCrudRepositoryUsuarios extends CrudRepository<EntityUsuario, Integer> {
 

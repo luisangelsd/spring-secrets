@@ -3,43 +3,43 @@ package com.secrets.dao.modelo.servicios;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.secrets.dao.modelo.entitys.EntitySecretos;
+import com.secrets.dao.modelo.entitys.EntitySecreto;
 
 @Service(value = "serviceDaoSecrets")
-public class ServiceDaoSecrets implements IServiceDaoSecrets{
+public class ServicesSecrets implements IServicesSecrets{
 	
 	
+	//-- Inyección de Repository
 	@Autowired
-	private IServiceCrudRepository serviceCrudRepository;
+	private ISecretsCrudRepository serviceCrudRepository;
 
 	
 	
-	
+	//--- Metodos
 	@Override
-	public List<EntitySecretos> listarTodos(){
-		return (List<EntitySecretos>) serviceCrudRepository.findAll();
+	public List<EntitySecreto> listarTodos(){
+		return (List<EntitySecreto>) serviceCrudRepository.findAll();
 	}
 
 	@Override
-	public List<EntitySecretos> listarPorCategoria(String categoria) {	
+	public List<EntitySecreto> listarPorCategoria(String categoria) {	
 		return serviceCrudRepository.faindByCategory(categoria);
 	}
 
 	
 	@Override
-	public EntitySecretos buscarPorId(Long id) {
+	public EntitySecreto buscarPorId(Long id) {
 		return serviceCrudRepository.findById(id).orElse(null);
 	}
 	
 
 	@Override
-	public EntitySecretos guardar(EntitySecretos entitySecretos) {	
+	public EntitySecreto guardar(EntitySecreto entitySecretos) {	
 		return serviceCrudRepository.save(entitySecretos);
 	}
 
@@ -57,7 +57,7 @@ public class ServiceDaoSecrets implements IServiceDaoSecrets{
 	//-- Metodo: Paginado de todos los registros
 	@Override
 	@Transactional(readOnly = true)
-	public Page<EntitySecretos> paginado(Pageable pageable) {
+	public Page<EntitySecreto> paginado(Pageable pageable) {
 		return this.serviceCrudRepository.findAll(pageable);
 	}
 
