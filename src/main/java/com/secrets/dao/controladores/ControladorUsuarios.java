@@ -17,23 +17,26 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.secrets.dao.modelo.excepciones.RunTimeExceptionNotFound;
 import com.secrets.dao.modelo.servicios.IServicesUsuarios;
 import com.secrets.dao.oauth2.services.entitys.EntityUsuario;
 
 
 
-
+@CrossOrigin({"*"})
 @RestController
-@RequestMapping("adm/")
+@RequestMapping("usuarios/")
 public class ControladorUsuarios {
 	
 	//-- Variables globales
@@ -49,29 +52,20 @@ public class ControladorUsuarios {
 	
 	
 	@Secured({"ROLE_ADMIN","ROLE_USER"})
-	@GetMapping("ver/usuario/{username}")
-	public ResponseEntity<?> verUsuario(@PathVariable(name = "username")String username){
+	@GetMapping("ver/{username}")
+	@ResponseStatus(HttpStatus.OK)
+	public EntityUsuario verUsuario(@PathVariable String username) throws Exception{
 		
-		
-		try {
-			
 			//-- Validar que el usuario exista
 			this.entityUsuario=this.serviciosUsuarios.buscarUsuarioByUsername(username);
 			if (this.entityUsuario==null) {
-				this.response.put("error", "El usuario no existe");
-				return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.INTERNAL_SERVER_ERROR);
+				throw new RunTimeExceptionNotFound("¡No existe el Usuario!");
 			}
-			
-			
+					
 			//-- Regresar respuesta
 			this.entityUsuario.setPassword("");
-			return new ResponseEntity<EntityUsuario>(this.entityUsuario, HttpStatus.OK);
+			return this.entityUsuario;
 
-		} catch (Exception e) {
-			this.response.put("error", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		
 		
 	}
 	

@@ -13,7 +13,7 @@ public interface IUsuariosCrudRepository extends CrudRepository<EntityUsuario, I
 
 	
 	@Transactional
-	@Query(value = "SELECT * FROM USUARIOS WHERE USERNAME= :username", nativeQuery = true)
+	@Query(value = "SELECT * FROM USUARIOS WHERE USERNAME = :username", nativeQuery = true)
 	public EntityUsuario buscarUsuarioByUsername(@Param("username") String username);
 	
 

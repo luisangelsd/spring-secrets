@@ -28,10 +28,11 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter  {
 		public void configure(HttpSecurity http) throws Exception {
 			http.authorizeRequests()
 			.antMatchers(HttpMethod.GET,"/listar/**").permitAll() //-- Si no se marca el metodo se le asignan todos
+			.antMatchers(HttpMethod.GET,"/categorias/listar/**").permitAll()
 			.antMatchers(HttpMethod.GET,"/buscar/**").permitAll()
 			.antMatchers(HttpMethod.POST,"/guardar/**").permitAll()
 			.antMatchers(HttpMethod.PUT,"/editar/**").permitAll()
-			.antMatchers(HttpMethod.GET,"/adm/imagen-perfil/show/**").permitAll()
+			.antMatchers(HttpMethod.GET,"/usuarios/imagen-perfil/show/**").permitAll()
 			.antMatchers("/v3/api-docs/**").permitAll()
 			.antMatchers("/swagger-ui/**").permitAll()
 			.antMatchers("/h2-console/**").permitAll()
