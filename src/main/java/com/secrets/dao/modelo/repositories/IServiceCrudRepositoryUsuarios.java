@@ -1,4 +1,4 @@
-package com.secrets.dao.oauth2.services;
+package com.secrets.dao.modelo.repositories;
 
 import javax.transaction.Transactional;
 

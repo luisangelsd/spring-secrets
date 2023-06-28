@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.secrets.dao.modelo.repositories.IServiceCrudRepositoryUsuarios;
 import com.secrets.dao.oauth2.services.entitys.EntityUsuario;
 
 

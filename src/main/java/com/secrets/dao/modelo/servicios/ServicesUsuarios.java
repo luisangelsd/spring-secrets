@@ -1,8 +1,9 @@
-package com.secrets.dao.oauth2.services;
+package com.secrets.dao.modelo.servicios;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.secrets.dao.modelo.repositories.IServiceCrudRepositoryUsuarios;
 import com.secrets.dao.oauth2.services.entitys.EntityUsuario;
 
 

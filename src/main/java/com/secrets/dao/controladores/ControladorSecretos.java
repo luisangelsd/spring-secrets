@@ -131,6 +131,7 @@ public class ControladorSecretos {
 			
 		//-- Servicio
 			this.secreto=this.serviceDaoSecretos.guardar(entitySecreto);
+			
 		//-- Response
 			return this.secreto;
 			

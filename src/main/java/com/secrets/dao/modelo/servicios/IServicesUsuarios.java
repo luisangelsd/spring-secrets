@@ -1,4 +1,4 @@
-package com.secrets.dao.oauth2.services;
+package com.secrets.dao.modelo.servicios;
 
 import com.secrets.dao.oauth2.services.entitys.EntityUsuario;
 
