@@ -1,9 +1,17 @@
 # Documentacion:
-El objetivo de este proyecto es implementar una Api Restful con los métodos HTTP más utilizados: Get, Put, Post, Delete para despues implementar pruebas unitarias a cada una de las capaz (Repositories, Services, Controllers + Integración con TestRestTemplate y WebClientTest).
+Esta es una API permite poder guardar, editar, eliminar y listar secretos de personas desconocida. De igual manera cuenta con Oauth2 para la administración completa de los secretos.
 
-+ **Nota:** El proyecto consiste en el funcionamiento de un banco, en donde puedes administrar cuentas y realizar transferencias entre ellas.
 + **Nota:** El proyecto ya viene configurado, solamente tienes que descargar y ejecutarlo.
 
+## Dependencias Destacadas:
++ spring-security-oauth2
++ spring-security-jwt
++ jaxb-runtime
++ spring-boot-starter-data-jpa
++ spring-boot-starter-validation
++ h2
++ springdoc-openapi-ui
++ springfox-swagger-ui
 
 ## Probar con Swagger:
 La API cuenta con la dependencia de Swageger por lo cual podras probar los endpoinds directamente desde la misma API.
@@ -26,4 +34,8 @@ En la raíz del proyecto encontraras un archivo .json para importar dentro de Po
 + Password:
 
 Nota: El proyecto tiene archivos import.sql para crear registros por defecto. Este arcivo existe en la carpeta main y test
+
+## FrondEnd:
+Esta API se puede complementar con una interfaz grafica construida con Angular, para poder acceder a ella y a su documentación da clic en el siguiente enlace:
+https://github.com/sandovalguichoo/angular-secrets
 
