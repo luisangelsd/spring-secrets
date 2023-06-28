@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.secrets.dao.modelo.entitys.EntitySecreto;
 import com.secrets.dao.modelo.repositories.ISecretsCrudRepository;
 
-@Service(value = "serviceDaoSecrets")
+@Service(value = "servicesSecrets")
 public class ServicesSecrets implements IServicesSecrets{
 	
 	
@@ -37,8 +37,8 @@ public class ServicesSecrets implements IServicesSecrets{
 
 
 	@Override
-	public List<EntitySecreto> listarSecretosByIdCategoria(String categoria) {
-		List<EntitySecreto> list=this.serviceCrudRepository.listarSecretosByIdCategoria(categoria);
+	public List<EntitySecreto> listarSecretosByIdCategoria(Long idCategoria) {
+		List<EntitySecreto> list=this.serviceCrudRepository.listarSecretosByIdCategoria(idCategoria);
 		return (list==null)?list=new ArrayList<>():list;
 	}
 

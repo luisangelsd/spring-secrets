@@ -56,7 +56,7 @@ public class ControladorUsuarios {
 		try {
 			
 			//-- Validar que el usuario exista
-			this.entityUsuario=this.serviciosUsuarios.buscarUserPorUsername(username);
+			this.entityUsuario=this.serviciosUsuarios.buscarUsuarioByUsername(username);
 			if (this.entityUsuario==null) {
 				this.response.put("error", "El usuario no existe");
 				return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -92,7 +92,7 @@ public class ControladorUsuarios {
 			
 			
 			//-- Validar cliente
-			this.entityUsuario=this.serviciosUsuarios.buscarUserPorUsername(username);
+			this.entityUsuario=this.serviciosUsuarios.buscarUsuarioByUsername(username);
 			if (this.entityUsuario==null) {
 				this.response.put("error", "El usuario no Existe");
 				return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -113,7 +113,7 @@ public class ControladorUsuarios {
 				nombreArchivo=random.nextInt(9000)+"-"+archivo.getOriginalFilename().replace(" ", "-");							//-- Creamos el nuevo nombre del archivo
 				ruta= Paths.get("simulador-servidor-storage").resolve(nombreArchivo).toAbsolutePath(); 			//--  Creamos el nuevo Path completo
 				Files.copy(archivo.getInputStream(), ruta);														//-- Guarda la imagen en la ruta	
-				this.serviciosUsuarios.editarFotoPorUsername(username, nombreArchivo); 							//-- Actualizamos registro en la bd 	
+				this.serviciosUsuarios.editarUrlImagenPerfilUsuario(username, nombreArchivo); 							//-- Actualizamos registro en la bd 	
 			}	
 			
 			
@@ -138,7 +138,7 @@ public class ControladorUsuarios {
 		try {
 			
 			//--- Validar que el usuario exista
-			this.entityUsuario=this.serviciosUsuarios.buscarUserPorUsername(username);
+			this.entityUsuario=this.serviciosUsuarios.buscarUsuarioByUsername(username);
 			if (this.entityUsuario==null) {
 				this.response.put("error", "Lo sentimos, el usuario no existe");
 				return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -157,7 +157,7 @@ public class ControladorUsuarios {
 			
 			
 			//-- Actualizamos registro en la bd
-			this.serviciosUsuarios.editarFotoPorUsername(username,"mi-perfil.png");	
+			this.serviciosUsuarios.editarUrlImagenPerfilUsuario(username,"mi-perfil.png");	
 			
 			
 			//-- Regresamos respuesta

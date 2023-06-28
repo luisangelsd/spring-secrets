@@ -14,8 +14,8 @@ import com.secrets.dao.modelo.entitys.EntitySecreto;
 public interface ISecretsCrudRepository extends JpaRepository<EntitySecreto, Long>{
 	
 	
-	@Query(value = "SELECT * FROM secretos u  WHERE u.categoria=:categoria", nativeQuery = true)
-	public List<EntitySecreto> listarSecretosByIdCategoria(@Param("categoria") String categoria);
+	@Query(value = "SELECT * FROM secretos WHERE id_categoria= :id", nativeQuery = true)
+	public List<EntitySecreto> listarSecretosByIdCategoria(@Param("id") Long id);
 
 
 }

@@ -27,12 +27,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter  {
 		@Override
 		public void configure(HttpSecurity http) throws Exception {
 			http.authorizeRequests()
-			.antMatchers(HttpMethod.GET,"/listar").permitAll() //-- Si no se marca el metodo se le asignan todos
-			.antMatchers(HttpMethod.GET,"/listar/page/**").permitAll()
-			.antMatchers(HttpMethod.GET,"/listar/**").permitAll()
+			.antMatchers(HttpMethod.GET,"/listar/**").permitAll() //-- Si no se marca el metodo se le asignan todos
 			.antMatchers(HttpMethod.GET,"/buscar/**").permitAll()
-			.antMatchers(HttpMethod.POST,"/guardar").permitAll()
-			.antMatchers(HttpMethod.DELETE,"/eliminar/**").permitAll()
+			.antMatchers(HttpMethod.POST,"/guardar/**").permitAll()
 			.antMatchers(HttpMethod.PUT,"/editar/**").permitAll()
 			.antMatchers(HttpMethod.GET,"/adm/imagen-perfil/show/**").permitAll()
 			.antMatchers("/v3/api-docs/**").permitAll()

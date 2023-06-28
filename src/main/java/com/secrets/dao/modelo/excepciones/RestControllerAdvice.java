@@ -47,8 +47,8 @@ public class RestControllerAdvice {
   //--------------------------------------------------------------------------
     
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	@ExceptionHandler(RunTimeSecretNotFound.class)
-	public Map<String, Object> runTimeSecretNotFound(RunTimeSecretNotFound e){
+	@ExceptionHandler(RunTimeExceptionNotFound.class)
+	public Map<String, Object> runTimeSecretNotFound(RunTimeExceptionNotFound e){
 		
 		 
 		this.responseBody=new HashMap<>();

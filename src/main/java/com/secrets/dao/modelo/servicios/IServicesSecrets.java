@@ -13,7 +13,7 @@ public interface IServicesSecrets{
 	
 	public List<EntitySecreto> listarSecretos() throws DataAccessException;
 	public Page<EntitySecreto> listarSecretosPaginado(Pageable pageable) throws DataAccessException;
-	public List<EntitySecreto> listarSecretosByIdCategoria(String categoria) throws DataAccessException;
+	public List<EntitySecreto> listarSecretosByIdCategoria(Long idCategoria) throws DataAccessException;
 	public EntitySecreto buscarSecretoById(Long id) throws DataAccessException;
 	public EntitySecreto guardarEditarSecreto(EntitySecreto entitySecretos)throws DataAccessException;
 	public void eliminarSecretoById(Long id) throws DataAccessException;

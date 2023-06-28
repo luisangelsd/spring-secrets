@@ -14,10 +14,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.lang.NonNull;
 
 @Entity()
 @Table(name = "secretos")
@@ -38,7 +36,7 @@ public class EntitySecreto implements Serializable{
 	private LocalDate fCreacion;
 	
 
-	@NotNull(message =  "La categoria no puede estar vacia")
+	
 	@ManyToOne
 	@JoinColumn(name="id_categoria")
 	private EntityCategoria entityCategoria;
