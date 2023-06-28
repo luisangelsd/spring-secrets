@@ -24,9 +24,7 @@ import javax.validation.constraints.NotEmpty;
 @Table(name = "usuarios")
 public class EntityUsuario implements Serializable{
 
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 
 	@Id

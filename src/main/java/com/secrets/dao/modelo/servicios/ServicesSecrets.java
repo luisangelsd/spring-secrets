@@ -1,5 +1,6 @@
 package com.secrets.dao.modelo.servicios;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,47 +21,45 @@ public class ServicesSecrets implements IServicesSecrets{
 	private ISecretsCrudRepository serviceCrudRepository;
 
 	
-	
-	//--- Metodos
-	@Override
-	public List<EntitySecreto> listarTodos(){
-		return (List<EntitySecreto>) serviceCrudRepository.findAll();
-	}
+	//--------------------------METODOS----------------------------------
 
 	@Override
-	public List<EntitySecreto> listarPorCategoria(String categoria) {	
-		return serviceCrudRepository.faindByCategory(categoria);
+	public List<EntitySecreto> listarSecretos(){
+		List<EntitySecreto> list=this.serviceCrudRepository.findAll();
+		return (list==null)?list=new ArrayList<>():list;
+	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public Page<EntitySecreto> listarSecretosPaginado(Pageable pageable) {
+		return this.serviceCrudRepository.findAll(pageable);
+	}
+
+
+	@Override
+	public List<EntitySecreto> listarSecretosByIdCategoria(String categoria) {
+		List<EntitySecreto> list=this.serviceCrudRepository.listarSecretosByIdCategoria(categoria);
+		return (list==null)?list=new ArrayList<>():list;
 	}
 
 	
 	@Override
-	public EntitySecreto buscarPorId(Long id) {
+	public EntitySecreto buscarSecretoById(Long id) {
 		return serviceCrudRepository.findById(id).orElse(null);
 	}
 	
 
 	@Override
-	public EntitySecreto guardar(EntitySecreto entitySecretos) {	
+	public EntitySecreto guardarEditarSecreto(EntitySecreto entitySecretos) {	
 		return serviceCrudRepository.save(entitySecretos);
 	}
 
+	
 	@Override
-	public void eliminarPorId(Long id) {
+	public void eliminarSecretoById(Long id) {
 		serviceCrudRepository.deleteById(id);
 	}
 
-	@Override
-	public Boolean existePorId(Long id) {		
-		return serviceCrudRepository.existsById(id);
-	}
-
 	
-	//-- Metodo: Paginado de todos los registros
-	@Override
-	@Transactional(readOnly = true)
-	public Page<EntitySecreto> paginado(Pageable pageable) {
-		return this.serviceCrudRepository.findAll(pageable);
-	}
-
 
 }

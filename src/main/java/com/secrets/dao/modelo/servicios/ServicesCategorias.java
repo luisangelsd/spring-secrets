@@ -17,7 +17,7 @@ public class ServicesCategorias implements IServicesCategorias{
 	private ICategoriasCrudRepository serviceRepositoryCategorias;
 	
 	
-	
+	//--------------------------METODOS----------------------------------
 	@Override
 	public EntityCategoria buscarCategoriaById(Long id) {
 		return this.serviceRepositoryCategorias.findById(id).orElse(null);
@@ -27,7 +27,7 @@ public class ServicesCategorias implements IServicesCategorias{
 	@Override
 	public List<EntityCategoria> listarCategorias(){
 		List<EntityCategoria> list= (List<EntityCategoria>) this.serviceRepositoryCategorias.findAll();
-		return (list == null || list.isEmpty())?  list=new ArrayList<>() : list;
+		return (list == null)? list=new ArrayList<>() : list;
 	}
 
 }

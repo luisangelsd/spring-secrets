@@ -17,18 +17,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.secrets.dao.modelo.repositories.IServiceCrudRepositoryUsuarios;
+import com.secrets.dao.modelo.repositories.IUsuariosCrudRepository;
 import com.secrets.dao.oauth2.services.entitys.EntityUsuario;
 
 
 @Service(value = "serviceOauth2Usuarios")
-public class ServiceOauth2Usuarios implements UserDetailsService {
+public class ServiceOauth2 implements UserDetailsService {
 
 	private Logger logger= LoggerFactory.getLogger(UserDetailsService.class);
 	
 	//-- Inyeccion de servicios
 	@Autowired
-	private IServiceCrudRepositoryUsuarios serviceCrudUsuarios;
+	private IUsuariosCrudRepository serviceCrudUsuarios;
 	
 	
 	
@@ -38,7 +38,7 @@ public class ServiceOauth2Usuarios implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-		EntityUsuario entityUsuario= this.serviceCrudUsuarios.findUsuarioByUsername(username);
+		EntityUsuario entityUsuario= this.serviceCrudUsuarios.buscarUsuarioByUsername(username);
 		
 		//-- Validar que exista el usuario
 		if (entityUsuario==null) {

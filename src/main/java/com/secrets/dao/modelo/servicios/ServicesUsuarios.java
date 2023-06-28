@@ -3,7 +3,7 @@ package com.secrets.dao.modelo.servicios;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.secrets.dao.modelo.repositories.IServiceCrudRepositoryUsuarios;
+import com.secrets.dao.modelo.repositories.IUsuariosCrudRepository;
 import com.secrets.dao.oauth2.services.entitys.EntityUsuario;
 
 
@@ -13,24 +13,24 @@ public class ServicesUsuarios implements IServicesUsuarios{
 	
 	//-- Inyeccion de servicios
 	@Autowired
-	private IServiceCrudRepositoryUsuarios servicesCrud;
+	private IUsuariosCrudRepository usuariosCrudRepository;
 	
 	
 	
 	
 	
-	// =============== Metodos ===============
+	//--------------------------METODOS----------------------------------
 	
 
 	@Override
-	public EntityUsuario buscarUserPorUsername(String username) throws Exception {
-		return this.servicesCrud.findUsuarioByUsername(username);
+	public EntityUsuario buscarUsuarioByUsername(String username){
+		return this.usuariosCrudRepository.buscarUsuarioByUsername(username);
 	}
 
 
 	@Override
-	public void editarFotoPorUsername(String username, String urlFoto) throws Exception {
-			this.servicesCrud.editarImagenUsuario(username, urlFoto);
+	public void editarUrlImagenPerfilUsuario(String username, String urlFoto){
+			this.usuariosCrudRepository.editarUrlImagenPerfilUsuario(username, urlFoto);
 		
 	}
 

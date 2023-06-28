@@ -11,7 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.secrets.dao.oauth2.services.ServiceOauth2Usuarios;
+import com.secrets.dao.oauth2.services.ServiceOauth2;
 
 
 @EnableGlobalMethodSecurity(securedEnabled = true)
@@ -20,7 +20,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter{
 
 	//-- Inyectamos nuestro servicios
 	@Autowired
-	private ServiceOauth2Usuarios servicioOauthUsuario;
+	private ServiceOauth2 servicioOauthUsuario;
 	
 	
 	
