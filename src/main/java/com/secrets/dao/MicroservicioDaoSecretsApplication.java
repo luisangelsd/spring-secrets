@@ -19,6 +19,7 @@ public class MicroservicioDaoSecretsApplication implements CommandLineRunner {
 	}
 
 	
+	//-- Imprimir en pantalla contraseñas encriptadad = 123
 	@Override
 	public void run(String... args) throws Exception {
 		

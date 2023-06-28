@@ -1,5 +1,6 @@
 package com.secrets.dao.modelo.excepciones;
 
+import java.net.MalformedURLException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -87,6 +88,30 @@ public class RestControllerAdvice {
 		
 		return this.responseBody;
 	}
+	
+	
+	//--------------------------------------------------------------------------
+	
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(MalformedURLException.class)
+	public Map<String, Object> malformedURLException(MalformedURLException e){
+		
+		
+		this.responseBody=new HashMap<>();
+		this.errors=new HashMap<>();
+		 
+		//-- Preparando Errores
+				this.errors.put("message", e.getMessage());
+				
+		//-- Preparando ResponseBody
+		this.responseBody.put("errors", errors);
+		this.responseBody.put("timestamp", LocalDateTime.now());
+		this.responseBody.put("code", e.hashCode());
+		this.responseBody.put("send", "RestControllerAdvice");
+		
+		return this.responseBody;
+	}
+	
 	
 	//--------------------------------------------------------------------------
 	

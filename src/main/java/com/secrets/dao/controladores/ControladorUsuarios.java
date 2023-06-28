@@ -2,6 +2,8 @@ package com.secrets.dao.controladores;
 
 
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -50,11 +52,12 @@ public class ControladorUsuarios {
 	@Autowired
 	private IServicesUsuarios serviciosUsuarios;
 	
+	//--------------------------------------------------------------------------	
 	
 	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@GetMapping("ver/{username}")
 	@ResponseStatus(HttpStatus.OK)
-	public EntityUsuario verUsuario(@PathVariable String username) throws Exception{
+	public EntityUsuario buscarUsuarioByUsername(@PathVariable String username) throws Exception{
 		
 			//-- Validar que el usuario exista
 			this.entityUsuario=this.serviciosUsuarios.buscarUsuarioByUsername(username);
@@ -66,119 +69,88 @@ public class ControladorUsuarios {
 			this.entityUsuario.setPassword("");
 			return this.entityUsuario;
 
-		
 	}
 	
+	//--------------------------------------------------------------------------
 	
-	//Endpoint: Upload Imagen
 	// No olvides configurar lo siguiente en tu application.properties :)
 	//spring.servlet.multipart.max-file-size=10MB
 	//spring.servlet.multipart.max-request-size=10MB
 	@PostMapping("/imagen-perfil/upload/")
 	@Secured({"ROLE_ADMIN","ROLE_USER"})
-	public ResponseEntity<?> editarImagen(@RequestParam(name = "archivo") MultipartFile archivo, @RequestParam(name = "username") String username){
+	@ResponseStatus(HttpStatus.OK)
+	public void editarUrlImagenPerfilUsuario(@RequestParam(name = "archivo") MultipartFile archivo, @RequestParam(name = "username") String username) throws IOException{
 		
-
-		try {
-			
-			String nombreArchivo=archivo.getOriginalFilename();												 //-- Obtenemos nombre archivo y lo modificamos
-			Path ruta= Paths.get("simulador-servidor-storage").resolve(nombreArchivo).toAbsolutePath();		 //-- Armamos la ruta de la imagen subida para despues validar si existe y eliminarla
-			
-			
-			//-- Validar cliente
-			this.entityUsuario=this.serviciosUsuarios.buscarUsuarioByUsername(username);
-			if (this.entityUsuario==null) {
-				this.response.put("error", "El usuario no Existe");
-				return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-			
-			
-			//-- Si tiene otra foto establecida por defecto la eliminamos
-			if (!this.entityUsuario.getUrlFoto().equalsIgnoreCase("mi-perfil.png")) {
-				Path rutaAnterior=Paths.get("simulador-servidor-storage").resolve(this.entityUsuario.getUrlFoto()).toAbsolutePath(); //-- Amamos rura anterior
-				Files.deleteIfExists(rutaAnterior);																				     //-- Eliminamos si existe
-			}
-			
-			
-			
-			
-			//-- Validamos que la imagen no este vacia y guardamos
-			if (!archivo.isEmpty()) {
-				nombreArchivo=random.nextInt(9000)+"-"+archivo.getOriginalFilename().replace(" ", "-");							//-- Creamos el nuevo nombre del archivo
-				ruta= Paths.get("simulador-servidor-storage").resolve(nombreArchivo).toAbsolutePath(); 			//--  Creamos el nuevo Path completo
-				Files.copy(archivo.getInputStream(), ruta);														//-- Guarda la imagen en la ruta	
-				this.serviciosUsuarios.editarUrlImagenPerfilUsuario(username, nombreArchivo); 							//-- Actualizamos registro en la bd 	
-			}	
-			
-			
-			return new ResponseEntity<>(HttpStatus.OK);
-			
-			
-		} 		
-		catch (Exception e) {
-			this.response.put("error", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.INTERNAL_SERVER_ERROR);
-		}
+		this.entityUsuario=null;
 	
+		//-- Validar cliente
+		this.entityUsuario=this.serviciosUsuarios.buscarUsuarioByUsername(username);
+		if (this.entityUsuario == null) {
+			throw new RunTimeExceptionNotFound("El usuario no Existe");
+		}
+		
+		//-- Creamos la ruta final del archivo requesy
+		String nombreArchivo= archivo.getOriginalFilename();
+		Path rutaCompletaNueva= Paths.get("simulador-servidor-storage").resolve(nombreArchivo).toAbsolutePath();
+			
+
+		//-- Si tiene otra foto establecida por defecto la eliminamos
+		if (!this.entityUsuario.getUrlFoto().equalsIgnoreCase("mi-perfil.png")) {
+			Path rutaCompletaAnterior=Paths.get("simulador-servidor-storage").resolve(this.entityUsuario.getUrlFoto()).toAbsolutePath(); //-- Amamos rura anterior
+			Files.deleteIfExists(rutaCompletaAnterior);																				     //-- Eliminamos si existe
+		}
+			
+				
+		//-- Validamos que la imagen no este vacia y guardamos
+		if (!archivo.isEmpty()) {
+			nombreArchivo=random.nextInt(9000)+"-"+archivo.getOriginalFilename().replace(" ", "-");							//-- Creamos el nuevo nombre del archivo
+			rutaCompletaNueva= Paths.get("simulador-servidor-storage").resolve(nombreArchivo).toAbsolutePath(); 			//--  Creamos el nuevo Path completo
+			Files.copy(archivo.getInputStream(), rutaCompletaNueva);														//-- Guarda la imagen en la ruta	
+			this.serviciosUsuarios.editarUrlImagenPerfilUsuario(username, nombreArchivo); 							//-- Actualizamos registro en la bd 	
+		}		
+
 	}
 	
 	
+	//--------------------------------------------------------------------------
 	
 	//-- Endpoind: Eliminar imagen de perfil
 	@DeleteMapping("imagen-perfil/eliminar/{username}")
 	@Secured({"ROLE_ADMIN","ROLE_USER"})
-	public ResponseEntity<?> eliminarFotoPerfil(@PathVariable(name = "username", required = true)String username){
+	@ResponseStatus(HttpStatus.OK)
+	public void eliminarFotoPerfil(@PathVariable String username) throws IOException{
 		
-		try {
+	
+			this.entityUsuario=null;
 			
 			//--- Validar que el usuario exista
 			this.entityUsuario=this.serviciosUsuarios.buscarUsuarioByUsername(username);
 			if (this.entityUsuario==null) {
-				this.response.put("error", "Lo sentimos, el usuario no existe");
-				return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.INTERNAL_SERVER_ERROR);
+				throw new RunTimeExceptionNotFound("Lo sentimos, el usuario no existe");
 			} 
 			
 			
-			//--- Si la imagen es la que tiene por defecto no se realiza ningun cambio
-			if (this.entityUsuario.getUrlFoto().equalsIgnoreCase("mi-perfil.png")){
-				return new ResponseEntity<>(HttpStatus.OK);
+			//--- Eliminar la foto y cambiar la ruta
+			if (!this.entityUsuario.getUrlFoto().equalsIgnoreCase("mi-perfil.png")){
+				Path ruta= Paths.get("simulador-servidor-storage").resolve(this.entityUsuario.getUrlFoto()).toAbsolutePath();
+				Files.deleteIfExists(ruta);
 			}
 			
-			
-			//--- Eliminar la foto y cambiar la ruta
-			Path ruta= Paths.get("simulador-servidor-storage").resolve(this.entityUsuario.getUrlFoto()).toAbsolutePath();
-			Files.deleteIfExists(ruta);
-			
-			
+	
 			//-- Actualizamos registro en la bd
 			this.serviciosUsuarios.editarUrlImagenPerfilUsuario(username,"mi-perfil.png");	
 			
-			
-			//-- Regresamos respuesta
-			return new ResponseEntity<>(HttpStatus.OK);
-			
-			
-			
-		} catch (Exception e) {
-			this.response.put("error", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.INTERNAL_SERVER_ERROR);
-			
-		}
-		
+
 	}
 	
-
+	
+	//--------------------------------------------------------------------------
+	
 	//--Endpoint: Ver imagen
 	@GetMapping("imagen-perfil/show/{urlImagen:.+}")
-	public ResponseEntity showImagenPerfil(@PathVariable(name = "urlImagen") String urlImagen) {
+	public ResponseEntity<?> showImagenPerfil(@PathVariable(name = "urlImagen") String urlImagen) throws MalformedURLException {
 		
-		
-
-		
-		try {
-			
-			
-			
+	
 			//-- Creamos la ruta completa y configuramos recurso
 			Path rutaCompleta= Paths.get("simulador-servidor-storage").resolve(urlImagen).toAbsolutePath(); //-- Creamos la url completa
 			Resource recurso=new UrlResource(rutaCompleta.toUri());  										//-- Le asignamos la url del recurso
@@ -187,8 +159,7 @@ public class ControladorUsuarios {
 			
 			//-- Validamos que el recurso exista y sea legible
 			if (!recurso.exists() || !recurso.isReadable()) {
-				this.response.put("error", "El recurso no esta diponible: No existe o no es legible");
-				return new ResponseEntity<Map<String, Object>>(this.response, HttpStatus.INTERNAL_SERVER_ERROR);
+				throw new RuntimeException("El recurso no esta diponible: No existe o no es legible");
 			}
 			
 			
@@ -196,14 +167,9 @@ public class ControladorUsuarios {
 			HttpHeaders cabeceras= new HttpHeaders();
 			cabeceras.add(HttpHeaders.CONTENT_DISPOSITION, "attachment-, filename=\""+recurso.getFilename()+"\"");
 			
-			
+	
 			return new ResponseEntity<Resource>(recurso,cabeceras, HttpStatus.OK);
-			
-		} catch (Exception e) {
-			this.response.put("error", e.getMessage());
-			return new ResponseEntity<Map<String, Object>>(this.response,HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-		
+	
 	}
 	
 
