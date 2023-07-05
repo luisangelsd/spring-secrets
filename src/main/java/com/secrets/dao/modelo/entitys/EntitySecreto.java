@@ -52,8 +52,13 @@ public class EntitySecreto implements Serializable{
 	}
 	
 	public EntitySecreto() {}
-	
-	
+
+	public EntitySecreto(Long id, String secreto, LocalDate fCreacion, EntityCategoria entityCategoria) {
+		this.id = id;
+		this.secreto = secreto;
+		this.fCreacion = fCreacion;
+		this.entityCategoria = entityCategoria;
+	}
 
 	//--------------------------------------------------------------------------
 	public Long getId() {return id;	}

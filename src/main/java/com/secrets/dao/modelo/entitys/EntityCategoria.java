@@ -30,7 +30,15 @@ public class EntityCategoria implements Serializable {
 	
 	//-------------------------------------------------------
 	EntityCategoria(){ }
-	
+
+	public EntityCategoria(Long id, String nombre) {
+		this.id = id;
+		this.nombre = nombre;
+	}
+	public EntityCategoria(String nombre) {
+		this.nombre = nombre;
+	}
+
 	//-------------------------------------------------------
 	private static final long serialVersionUID = 1L;
 
