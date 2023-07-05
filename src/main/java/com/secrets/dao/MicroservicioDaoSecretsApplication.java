@@ -8,27 +8,29 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+
 @SpringBootApplication
 public class MicroservicioDaoSecretsApplication implements CommandLineRunner {
 
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
-	
+
+
+
 	public static void main(String[] args) {		
 		SpringApplication.run(MicroservicioDaoSecretsApplication.class, args);
 	}
 
-	
-	//-- Imprimir en pantalla contraseñas encriptadad = 123
-	@Override
+
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+
+
+	@Override //-- Imprimir en pantalla contraseñas encriptadad = 123
 	public void run(String... args) throws Exception {
-		
 		String password="123";
 		for(int i=0; i<4;i++) {
 			String passEncry= passwordEncoder.encode(password);
 			System.out.println(passEncry);
 		}
-		
 	}
 
 	
