@@ -20,14 +20,14 @@ INSERT INTO usuarios ( username, url_foto, enabled, descripcion_perfil, password
  INSERT INTO categorias (nombre) VALUES('pareja')
  
  
-  -- INSERTAR VALORES PARA LOS SECRETOS
- INSERT INTO secretos (secreto, fecha_creacion, id_categoria) VALUES ('Lorem ipsum es el texto que se usa habitualmente en diseño gráfico','2023-01-01',1)
- INSERT INTO secretos (secreto, fecha_creacion, id_categoria) VALUES ('Lorem ipsum es el texto que se usa habitualmente en diseño gráfico','2023-01-01',2)
- INSERT INTO secretos (secreto, fecha_creacion, id_categoria) VALUES ('Lorem ipsum es el texto que se usa habitualmente en diseño gráfico','2023-01-01',3)
- INSERT INTO secretos (secreto, fecha_creacion, id_categoria) VALUES ('Lorem ipsum es el texto que se usa habitualmente en diseño gráfico','2023-01-01',4)
-  INSERT INTO secretos (secreto, fecha_creacion, id_categoria) VALUES ('Lorem ipsum es el texto que se usa habitualmente en diseño gráfico','2023-01-01',5)
+  INSERTAR VALORES PARA LOS SECRETOS
   INSERT INTO secretos (secreto, fecha_creacion, id_categoria) VALUES ('Lorem ipsum es el texto que se usa habitualmente en diseño gráfico','2023-01-01',1)
- INSERT INTO secretos (secreto, fecha_creacion, id_categoria) VALUES ('Lorem ipsum es el texto que se usa habitualmente en diseño gráfico','2023-01-01',2)
- INSERT INTO secretos (secreto, fecha_creacion, id_categoria) VALUES ('Lorem ipsum es el texto que se usa habitualmente en diseño gráfico','2023-01-01',3)
- INSERT INTO secretos (secreto, fecha_creacion, id_categoria) VALUES ('Lorem ipsum es el texto que se usa habitualmente en diseño gráfico','2023-01-01',4)
+  INSERT INTO secretos (secreto, fecha_creacion, id_categoria) VALUES ('Lorem ipsum es el texto que se usa habitualmente en diseño gráfico','2023-01-01',2)
+  INSERT INTO secretos (secreto, fecha_creacion, id_categoria) VALUES ('Lorem ipsum es el texto que se usa habitualmente en diseño gráfico','2023-01-01',3)
+  INSERT INTO secretos (secreto, fecha_creacion, id_categoria) VALUES ('Lorem ipsum es el texto que se usa habitualmente en diseño gráfico','2023-01-01',4)
+   INSERT INTO secretos (secreto, fecha_creacion, id_categoria) VALUES ('Lorem ipsum es el texto que se usa habitualmente en diseño gráfico','2023-01-01',5)
+   INSERT INTO secretos (secreto, fecha_creacion, id_categoria) VALUES ('Lorem ipsum es el texto que se usa habitualmente en diseño gráfico','2023-01-01',1)
+  INSERT INTO secretos (secreto, fecha_creacion, id_categoria) VALUES ('Lorem ipsum es el texto que se usa habitualmente en diseño gráfico','2023-01-01',2)
+  INSERT INTO secretos (secreto, fecha_creacion, id_categoria) VALUES ('Lorem ipsum es el texto que se usa habitualmente en diseño gráfico','2023-01-01',3)
+  INSERT INTO secretos (secreto, fecha_creacion, id_categoria) VALUES ('Lorem ipsum es el texto que se usa habitualmente en diseño gráfico','2023-01-01',4)
   INSERT INTO secretos (secreto, fecha_creacion, id_categoria) VALUES ('Lorem ipsum es el texto que se usa habitualmente en diseño gráfico','2023-01-01',5)
