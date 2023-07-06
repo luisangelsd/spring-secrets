@@ -34,6 +34,7 @@ import com.secrets.dao.modelo.excepciones.RunTimeExceptionNotFound;
 import com.secrets.dao.modelo.servicios.IServicesUsuarios;
 import com.secrets.dao.oauth2.services.entitys.EntityUsuario;
 
+import javax.validation.Valid;
 
 
 @CrossOrigin({"*"})
@@ -79,7 +80,7 @@ public class ControladorUsuarios {
 	@PostMapping("/imagen-perfil/upload/")
 	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@ResponseStatus(HttpStatus.OK)
-	public void editarUrlImagenPerfilUsuario (@RequestParam(name = "archivo") MultipartFile archivo, @RequestParam(name = "username") String username) throws IOException{
+	public void editarUrlImagenPerfilUsuario ( @RequestParam(name = "archivo") MultipartFile archivo, @RequestParam(name = "username") String username) throws IOException{
 
 		this.entityUsuario=null;
 

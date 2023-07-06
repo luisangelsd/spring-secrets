@@ -2,6 +2,7 @@ package com.secrets.dao.controladores;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.secrets.dao.Datos;
+import com.secrets.dao.modelo.excepciones.RunTimeExceptionNotFound;
 import com.secrets.dao.modelo.repositories.IUsuariosCrudRepository;
 import com.secrets.dao.modelo.servicios.IServicesCategorias;
 import com.secrets.dao.modelo.servicios.IServicesUsuarios;
@@ -74,16 +75,15 @@ class ControladorUsuariosTest {
     //------------------------------------------------------------------------------------------------
     @Test
     @Order(2)
-    @DisplayName("editarUrlImagenPerfilUsuario() - Cargada")
+    @DisplayName("editarUrlImagenPerfilUsuario() - Editada")
     void editarUrlImagenPerfilUsuario() throws Exception {
 
 
-        //-- Datos: Le decimos que no regresa nada
+        //-- Datos:
         Mockito.when(this.iServicesUsuarios.buscarUsuarioByUsername(Mockito.any())).thenReturn(Datos.usuario1);
         Mockito.doNothing().when(this.iServicesUsuarios).editarUrlImagenPerfilUsuario(Mockito.any(),Mockito.any());
 
-        //-- Creando: File
-     //   MockMultipartFile file = new MockMultipartFile("file", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
+        //-- Creando: Imagen (File)
         File file = new File("C:\\Users\\luisitobonito\\Downloads\\img.jpg");
         MultipartFile multipartFile = new MockMultipartFile("img.jpg", new FileInputStream(file));
 
@@ -91,6 +91,7 @@ class ControladorUsuariosTest {
         //-- Creando: Params
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("username", "username");
+
 
         //-- Servicio + Test
         this.mockMvc.perform(MockMvcRequestBuilders.multipart("/usuarios/imagen-perfil/upload/")
@@ -102,19 +103,108 @@ class ControladorUsuariosTest {
     }
 
 
-//
+    @Test
+    @Order(2)
+    @DisplayName("editarUrlImagenPerfilUsuario() - Usuario no encontrado")
+    void editarUrlImagenPerfilUsuarioUsuarioNoEncontrado() throws Exception {
 
+
+        //-- Datos:
+        Mockito.when(this.iServicesUsuarios.buscarUsuarioByUsername(Mockito.any())).thenReturn(null);
+        Mockito.doNothing().when(this.iServicesUsuarios).editarUrlImagenPerfilUsuario(Mockito.any(),Mockito.any());
+
+        //-- Creando: Imagen (File)
+        File file = new File("C:\\Users\\luisitobonito\\Downloads\\img.jpg");
+        MultipartFile multipartFile = new MockMultipartFile("img.jpg", new FileInputStream(file));
+
+
+        //-- Creando: Params
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("username", "username");
+
+
+        //-- Servicio + Test
+        this.mockMvc.perform(MockMvcRequestBuilders.multipart("/usuarios/imagen-perfil/upload/")
+                        .file("archivo", multipartFile.getBytes())
+                        .params(params)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization","Bearer "+ Datos.tokenAdmin))
+                    .andExpect(MockMvcResultMatchers.status().isNotAcceptable());
+    }
+
+    @Test
+    @Order(2)
+    @DisplayName("editarUrlImagenPerfilUsuario() - BatRequest")
+    void editarUrlImagenPerfilUsuarioBadRequest() throws Exception {
+
+
+        //-- Datos:
+        Mockito.when(this.iServicesUsuarios.buscarUsuarioByUsername(Mockito.any())).thenReturn(Datos.usuario1);
+        Mockito.doNothing().when(this.iServicesUsuarios).editarUrlImagenPerfilUsuario(Mockito.any(),Mockito.any());
+
+        //-- Creando: Imagen (File)
+        File file = new File("C:\\Users\\luisitobonito\\Downloads\\img.jpg");
+        MultipartFile multipartFile = new MockMultipartFile("img.jpg", new FileInputStream(file));
+
+
+        //-- Creando: Params
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("otro", "username");
+
+
+        //-- Servicio + Test
+        this.mockMvc.perform(MockMvcRequestBuilders.multipart("/usuarios/imagen-perfil/upload/")
+                        .file("archivo", multipartFile.getBytes())
+                        .params(params)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization","Bearer "+ Datos.tokenAdmin))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError());
+    }
 
 
     //------------------------------------------------------------------------------------------------
     @Test
-    void eliminarFotoPerfil() {
+    @Order(3)
+    @DisplayName("eliminarFotoPerfil() - Eliminada")
+    void eliminarFotoPerfil() throws Exception {
+
+        //-- Datos
+        Mockito.when(this.iServicesUsuarios.buscarUsuarioByUsername(Mockito.any())).thenReturn(Datos.usuario1);
+        Mockito.doNothing().when(this.iServicesUsuarios).editarUrlImagenPerfilUsuario(Mockito.any(), Mockito.any());
+
+
+        //-- Servicio + Test
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/usuarios/imagen-perfil/eliminar/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                 .header("Authorization","Bearer "+ Datos.tokenAdmin))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("eliminarFotoPerfil() - Usuario No Encontrado")
+    void eliminarFotoPerfilUsuarioNoEncontrado() throws Exception {
+
+        //-- Datos
+        Mockito.when(this.iServicesUsuarios.buscarUsuarioByUsername(Mockito.any())).thenReturn(null);
+        Mockito.doNothing().when(this.iServicesUsuarios).editarUrlImagenPerfilUsuario(Mockito.any(), Mockito.any());
+
+
+        //-- Servicio + Test
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/usuarios/imagen-perfil/eliminar/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization","Bearer "+ Datos.tokenAdmin))
+                .andExpect(MockMvcResultMatchers.status().isNotAcceptable());
+
     }
 
 
 
     //------------------------------------------------------------------------------------------------
     @Test
+    @Order(4)
+    @DisplayName("showImagenPerfil() - La muestra")
     void showImagenPerfil() {
     }
 }
