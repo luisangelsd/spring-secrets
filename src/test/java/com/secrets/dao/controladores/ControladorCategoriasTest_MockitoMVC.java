@@ -2,11 +2,9 @@ package com.secrets.dao.controladores;
 
 import com.secrets.dao.Datos;
 import com.secrets.dao.modelo.servicios.IServicesCategorias;
-import com.secrets.dao.modelo.servicios.IServicesUsuarios;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,12 +13,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @AutoConfigureMockMvc
-class ControladorCategoriasTest {
+class ControladorCategoriasTest_MockitoMVC {
 
     //-- Inyecciónes
     @Autowired

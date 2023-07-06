@@ -79,7 +79,7 @@ public class ControladorUsuarios {
 	@PostMapping("/imagen-perfil/upload/")
 	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@ResponseStatus(HttpStatus.OK)
-	public void editarUrlImagenPerfilUsuario(@RequestParam(name = "archivo") MultipartFile archivo, @RequestParam(name = "username") String username) throws IOException{
+	public void editarUrlImagenPerfilUsuario (@RequestParam(name = "archivo") MultipartFile archivo, @RequestParam(name = "username") String username) throws IOException{
 		
 		this.entityUsuario=null;
 	

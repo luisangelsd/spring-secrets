@@ -12,6 +12,10 @@ import java.util.List;
 
 public class Datos {
 
+    public static String tokenAdmin="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODg2NjUwMzUsInVzZXJfbmFtZSI6ImFkbWluIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiJdLCJqdGkiOiI0MDhiY2M0Mi1mNGJjLTQ3OWEtYWI4Zi0wYWY5ZGFkNDQyNTYiLCJjbGllbnRfaWQiOiJhbmd1bGFyYXBwIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl19.DIcurOVleQ2vVlm-_73DqVnzCzI63kdZsGzwKir-F6s";
+    public static String tokenUser="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODg2MDM4NjYsInVzZXJfbmFtZSI6InVzZXIiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiNjBhYjliNmItM2E4OS00ZGIzLTgxNmItMzViMmViZGM0YTdjIiwiY2xpZW50X2lkIjoiYW5ndWxhcmFwcCIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdfQ.nM1GUIvilOTji-S8UBHToJf2mp1fA0vwF05b6gqeXFM";
+
+
     public static EntityCategoria categoriaAmigos=new EntityCategoria(1L,"amigos");
     public static  EntityCategoria categoriaFamilia=new EntityCategoria(2L,"familia");
     public static EntityCategoria categoriaConocidos=new EntityCategoria(3L,"conocidos");
