@@ -2,9 +2,6 @@ package com.secrets.dao.controladores;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.secrets.dao.Datos;
-import com.secrets.dao.modelo.excepciones.RunTimeExceptionNotFound;
-import com.secrets.dao.modelo.repositories.IUsuariosCrudRepository;
-import com.secrets.dao.modelo.servicios.IServicesCategorias;
 import com.secrets.dao.modelo.servicios.IServicesUsuarios;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
@@ -17,7 +14,6 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,12 +21,10 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileInputStream;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class ControladorUsuariosTest {
+class ControladorUsuariosTest_MockitoMCV {
 
     //-- Inyección
     @Autowired
@@ -203,7 +197,7 @@ class ControladorUsuariosTest {
 
     //------------------------------------------------------------------------------------------------
     @Test
-    @Order(4)
+    @Order(4) //-- Queda pendiente
     @DisplayName("showImagenPerfil() - La muestra")
     void showImagenPerfil() {
     }

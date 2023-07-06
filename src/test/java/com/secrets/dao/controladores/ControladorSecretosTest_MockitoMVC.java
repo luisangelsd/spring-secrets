@@ -50,8 +50,6 @@ class ControladorSecretosTest_MockitoMVC {
     //---
 
     ObjectMapper objectMapper = new ObjectMapper();
-    private String tokenAdmin="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODg2MDgwNjksInVzZXJfbmFtZSI6ImFkbWluIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiJdLCJqdGkiOiJkMThiNmVhNS0wMmMzLTQ0MmUtYmI5NC1kZDU3MDllOWU2ZTEiLCJjbGllbnRfaWQiOiJhbmd1bGFyYXBwIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl19.QH7y6qvVTJOyHgKzZzN-EFaafmYbpVXhFCSXqGPq-X4";
-    private String tokenUser="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODg2MDM4NjYsInVzZXJfbmFtZSI6InVzZXIiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiNjBhYjliNmItM2E4OS00ZGIzLTgxNmItMzViMmViZGM0YTdjIiwiY2xpZW50X2lkIjoiYW5ndWxhcmFwcCIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdfQ.nM1GUIvilOTji-S8UBHToJf2mp1fA0vwF05b6gqeXFM";
 
 
     @BeforeEach
@@ -368,7 +366,7 @@ class ControladorSecretosTest_MockitoMVC {
 
         //-- Servicio + Test
         this.mockMvc.perform(MockMvcRequestBuilders.put("/adm/editar/1/categoria-id/1")
-                 .header("Authorization", "Bearer " + this.tokenAdmin)
+                 .header("Authorization", "Bearer " + Datos.tokenAdmin)
                  .contentType(MediaType.APPLICATION_JSON).content(this.objectMapper.writeValueAsString(Datos.secreto1)))
                  .andExpect(MockMvcResultMatchers.status().isOk());
 
@@ -386,7 +384,7 @@ class ControladorSecretosTest_MockitoMVC {
 
         //-- Servicio + Test
         this.mockMvc.perform(MockMvcRequestBuilders.put("/adm/editar/1/categoria-id/1")
-                 .header("Authorization", "Bearer " + this.tokenAdmin)
+                 .header("Authorization", "Bearer " + Datos.tokenAdmin)
                 .contentType(MediaType.APPLICATION_JSON).content(this.objectMapper.writeValueAsString(Datos.secreto1)))
                 .andExpect(MockMvcResultMatchers.status().isNotAcceptable());
     }
@@ -403,7 +401,7 @@ class ControladorSecretosTest_MockitoMVC {
 
         //-- Servicio + Test
         this.mockMvc.perform(MockMvcRequestBuilders.put("/adm/editar/1/categoria-id/1")
-                        .header("Authorization", "Bearer " + this.tokenAdmin)
+                        .header("Authorization", "Bearer " + Datos.tokenAdmin)
                         .contentType(MediaType.APPLICATION_JSON).content(this.objectMapper.writeValueAsString(Datos.secreto1)))
                 .andExpect(MockMvcResultMatchers.status().isNotAcceptable());
     }
@@ -420,7 +418,7 @@ class ControladorSecretosTest_MockitoMVC {
 
         //-- Servicio + Test
         this.mockMvc.perform(MockMvcRequestBuilders.put("/adm/editar/1/categoria-id/1")
-                 .header("Authorization", "Bearer " + this.tokenAdmin)
+                 .header("Authorization", "Bearer " + Datos.tokenAdmin)
                 .contentType(MediaType.APPLICATION_JSON).content(this.objectMapper.writeValueAsString(entitySecreto)))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
@@ -440,7 +438,7 @@ class ControladorSecretosTest_MockitoMVC {
 
         //-- Servicio + Test
         this.mockMvc.perform(MockMvcRequestBuilders.delete("/adm/eliminar/1")
-                .header("Authorization", "Bearer " + this.tokenAdmin)
+                .header("Authorization", "Bearer " + Datos.tokenAdmin)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
@@ -455,7 +453,7 @@ class ControladorSecretosTest_MockitoMVC {
 
         //-- Servicio + Test
         this.mockMvc.perform(MockMvcRequestBuilders.delete("/adm/eliminar/1")
-                .header("Authorization", "Bearer " + this.tokenAdmin)
+                .header("Authorization", "Bearer " + Datos.tokenAdmin)
                 .contentType(MediaType.APPLICATION_JSON))
              .andExpect(MockMvcResultMatchers.status().isNotAcceptable());
     }
