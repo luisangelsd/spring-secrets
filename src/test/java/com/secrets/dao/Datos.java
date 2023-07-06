@@ -36,6 +36,14 @@ public class Datos {
         return page;
     }
 
+    public static List<EntityCategoria> getListarCategorias(){
+        List<EntityCategoria> list= new ArrayList<>();
+        list.add(categoriaAmigos);
+        list.add(categoriaFamilia);
+        list.add(categoriaConocidos);
+
+        return list;
+    }
 
 
 }

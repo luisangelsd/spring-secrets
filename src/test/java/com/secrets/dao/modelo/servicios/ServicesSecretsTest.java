@@ -16,7 +16,7 @@ import com.secrets.dao.Datos;
 import com.secrets.dao.modelo.entitys.EntitySecreto;
 import com.secrets.dao.modelo.repositories.ISecretsCrudRepository;
 
-//-- Inyección: Mockito
+//-- Inyección: SpringBoot
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -163,5 +163,6 @@ public class ServicesSecretsTest {
 	void eliminarSecretoById(){
 
 	}
+
 
 }
