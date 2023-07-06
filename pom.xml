@@ -15,8 +15,8 @@
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
-		<maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+		<!--<maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>-->
 	</properties>
 	<dependencies>
 		<dependency>
@@ -86,6 +86,16 @@
 		<dependency>
  		   <groupId>org.glassfish.jaxb</groupId>
  		   <artifactId>jaxb-runtime</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>2.13.4</version>
+		</dependency>
+		<dependency><!--Esta soluciona el problema de: java.time.LocalDate` not supported -->
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>2.13.4</version>
 		</dependency>
 	</dependencies>
 	<build>

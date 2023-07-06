@@ -47,7 +47,7 @@ public class RestControllerAdvice {
 	
   //--------------------------------------------------------------------------
     
-	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
 	@ExceptionHandler(RunTimeExceptionNotFound.class)
 	public Map<String, Object> runTimeSecretNotFound(RunTimeExceptionNotFound e){
 		
@@ -69,7 +69,7 @@ public class RestControllerAdvice {
 
 	//--------------------------------------------------------------------------
 	
-	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
 	@ExceptionHandler(RuntimeException.class)
 	public Map<String, Object> runtimeException(RuntimeException e){
 		

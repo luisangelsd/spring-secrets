@@ -42,7 +42,7 @@ public class ServicesSecretsTest {
 	void listarSecretosTest() {
 
 		//-- Simular Repository
-		Mockito.when( this.iSecretsRepository.findAll()).thenReturn( Datos.getListarUsuarios());
+		Mockito.when( this.iSecretsRepository.findAll()).thenReturn( Datos.getListarSecretos());
 
 		//-- Ejecutar Servicio
 		List<EntitySecreto> lista = this.iServiceSecrets.listarSecretos();
@@ -77,7 +77,7 @@ public class ServicesSecretsTest {
 	void listarSecretosByIdCategoria() {
 
 		//-- Simular Repository
-		Mockito.when( this.iSecretsRepository.listarSecretosByIdCategoria( Mockito.any() )).thenReturn( Datos.getListarUsuarios() );
+		Mockito.when( this.iSecretsRepository.listarSecretosByIdCategoria( Mockito.any() )).thenReturn( Datos.getListarSecretos() );
 
 		//-- Ejecutar Servicio
 		List<EntitySecreto> lista = this.iServiceSecrets.listarSecretosByIdCategoria(3L);

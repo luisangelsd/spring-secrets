@@ -78,7 +78,7 @@ public class EntitySecreto implements Serializable{
 	public void setfCreacion(LocalDate fCreacion) {this.fCreacion = fCreacion;	}
 	
 	private static final long serialVersionUID = 1L;
-	
-	
+
+
 
 }

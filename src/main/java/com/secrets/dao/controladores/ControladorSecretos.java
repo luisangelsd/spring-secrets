@@ -157,7 +157,7 @@ public class ControladorSecretos {
 
 	@PutMapping("/editar/{idSecreto}/categoria-id/{idCategoria}")
 	@ResponseStatus(HttpStatus.OK)
-	public EntitySecreto guardarEditarSecreto(@Valid @RequestBody EntitySecreto requestEntity, @PathVariable Long idSecreto, @PathVariable Long idCategoria){
+	public EntitySecreto editarSecreto(@Valid @RequestBody EntitySecreto requestEntity, @PathVariable Long idSecreto, @PathVariable Long idCategoria){
 		
 	
 			//-- Validar: Secreto
@@ -175,7 +175,7 @@ public class ControladorSecretos {
 			
 			//-- Validar: Solamente se pueda editar el secreto si pertenece a la misma fecha
 			if (!entitySecretoActualizar.getfCreacion().equals( LocalDate.now())) {
-				throw new RuntimeException("Lo sentimos, este secreto no puede ser eliminado, debido a que pertenece a una fecha diferente a la de hoy");
+				throw new RuntimeException("Lo sentimos, este secreto no puede ser editado, debido a que pertenece a una fecha diferente a la de hoy");
 			}
 			
 			//-- Servicio: Editar
