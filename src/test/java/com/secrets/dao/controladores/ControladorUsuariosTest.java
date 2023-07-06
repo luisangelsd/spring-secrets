@@ -12,9 +12,17 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.FileInputStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -67,13 +75,35 @@ class ControladorUsuariosTest {
     @Test
     @Order(2)
     @DisplayName("editarUrlImagenPerfilUsuario() - Cargada")
-    void editarUrlImagenPerfilUsuario() {
+    void editarUrlImagenPerfilUsuario() throws Exception {
+
 
         //-- Datos: Le decimos que no regresa nada
+        Mockito.when(this.iServicesUsuarios.buscarUsuarioByUsername(Mockito.any())).thenReturn(Datos.usuario1);
         Mockito.doNothing().when(this.iServicesUsuarios).editarUrlImagenPerfilUsuario(Mockito.any(),Mockito.any());
 
-        
+        //-- Creando: File
+     //   MockMultipartFile file = new MockMultipartFile("file", "hello.txt", MediaType.TEXT_PLAIN_VALUE, "Hello, World!".getBytes());
+        File file = new File("C:\\Users\\luisitobonito\\Downloads\\img.jpg");
+        MultipartFile multipartFile = new MockMultipartFile("img.jpg", new FileInputStream(file));
+
+
+        //-- Creando: Params
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("username", "username");
+
+        //-- Servicio + Test
+        this.mockMvc.perform(MockMvcRequestBuilders.multipart("/usuarios/imagen-perfil/upload/")
+                .file("archivo", multipartFile.getBytes())
+                .params(params)
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization","Bearer "+ Datos.tokenAdmin))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
+
+//
+
 
 
     //------------------------------------------------------------------------------------------------

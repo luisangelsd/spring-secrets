@@ -80,34 +80,39 @@ public class ControladorUsuarios {
 	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@ResponseStatus(HttpStatus.OK)
 	public void editarUrlImagenPerfilUsuario (@RequestParam(name = "archivo") MultipartFile archivo, @RequestParam(name = "username") String username) throws IOException{
-		
+
 		this.entityUsuario=null;
-	
+
+		//-- Validar que la imagen no este vacia
+		if (archivo.isEmpty()) {
+			throw new RunTimeExceptionNotFound("La imagen esta vacia y/o no se pudo leer");
+		}
+
+
 		//-- Validar cliente
 		this.entityUsuario=this.serviciosUsuarios.buscarUsuarioByUsername(username);
 		if (this.entityUsuario == null) {
 			throw new RunTimeExceptionNotFound("El usuario no Existe");
 		}
-		
+
 		//-- Creamos la ruta final del archivo requesy
 		String nombreArchivo= archivo.getOriginalFilename();
 		Path rutaCompletaNueva= Paths.get("simulador-servidor-storage").resolve(nombreArchivo).toAbsolutePath();
-			
+
 
 		//-- Si tiene otra foto establecida por defecto la eliminamos
 		if (!this.entityUsuario.getUrlFoto().equalsIgnoreCase("mi-perfil.png")) {
 			Path rutaCompletaAnterior=Paths.get("simulador-servidor-storage").resolve(this.entityUsuario.getUrlFoto()).toAbsolutePath(); //-- Amamos rura anterior
 			Files.deleteIfExists(rutaCompletaAnterior);																				     //-- Eliminamos si existe
 		}
-			
-				
-		//-- Validamos que la imagen no este vacia y guardamos
-		if (!archivo.isEmpty()) {
-			nombreArchivo=random.nextInt(9000)+"-"+archivo.getOriginalFilename().replace(" ", "-");							//-- Creamos el nuevo nombre del archivo
-			rutaCompletaNueva= Paths.get("simulador-servidor-storage").resolve(nombreArchivo).toAbsolutePath(); 			//--  Creamos el nuevo Path completo
-			Files.copy(archivo.getInputStream(), rutaCompletaNueva);														//-- Guarda la imagen en la ruta	
-			this.serviciosUsuarios.editarUrlImagenPerfilUsuario(username, nombreArchivo); 							//-- Actualizamos registro en la bd 	
-		}		
+
+
+		//-- Guardamos
+			nombreArchivo=random.nextInt(9000)+"-"+archivo.getOriginalFilename().replace(" ", "-");					//-- Creamos el nuevo nombre del archivo
+			rutaCompletaNueva= Paths.get("simulador-servidor-storage").resolve(nombreArchivo).toAbsolutePath(); 	//--  Creamos el nuevo Path completo
+			Files.copy(archivo.getInputStream(), rutaCompletaNueva);												//-- Guarda la imagen en la ruta
+			this.serviciosUsuarios.editarUrlImagenPerfilUsuario(username, nombreArchivo); 							//-- Actualizamos registro en la bd
+
 
 	}
 	

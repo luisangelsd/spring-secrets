@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Datos {
 
-    public static String tokenAdmin="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODg2NjUwMzUsInVzZXJfbmFtZSI6ImFkbWluIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiJdLCJqdGkiOiI0MDhiY2M0Mi1mNGJjLTQ3OWEtYWI4Zi0wYWY5ZGFkNDQyNTYiLCJjbGllbnRfaWQiOiJhbmd1bGFyYXBwIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl19.DIcurOVleQ2vVlm-_73DqVnzCzI63kdZsGzwKir-F6s";
+    public static String tokenAdmin="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODg2NzQ2NTQsInVzZXJfbmFtZSI6ImFkbWluIiwiYXV0aG9yaXRpZXMiOlsiUk9MRV9BRE1JTiJdLCJqdGkiOiJmZjUyNTgwMy1hOTIyLTQyNWQtODBjNy1iYzUzMzllZTAzOGQiLCJjbGllbnRfaWQiOiJhbmd1bGFyYXBwIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl19.3uDd45Rjzas_vrNdEYcQYnTbGa2AGujZ9dqk2XUbA5A";
     public static String tokenUser="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2ODg2MDM4NjYsInVzZXJfbmFtZSI6InVzZXIiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwianRpIjoiNjBhYjliNmItM2E4OS00ZGIzLTgxNmItMzViMmViZGM0YTdjIiwiY2xpZW50X2lkIjoiYW5ndWxhcmFwcCIsInNjb3BlIjpbInJlYWQiLCJ3cml0ZSJdfQ.nM1GUIvilOTji-S8UBHToJf2mp1fA0vwF05b6gqeXFM";
 
 
@@ -27,7 +27,7 @@ public class Datos {
     public static EntityRol roleAdmin=new EntityRol(1,"admin");
     public static EntityRol roleUser=new EntityRol(2,"user");
 
-    public static EntityUsuario usuario1=new EntityUsuario(1,"user1","pass1", true, "Sin Descripcion","https://sandovalguicho.com/img.png", getAllRoles());
+    public static EntityUsuario usuario1=new EntityUsuario(1,"user1","pass1", true, "Sin Descripcion","mi-perfil-1.png", getAllRoles());
 
 
 
