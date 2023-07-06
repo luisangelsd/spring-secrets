@@ -157,10 +157,16 @@ public class ServicesSecretsTest {
 
 
 	//-------------------------------------------------------------------------------------------
-	@Test //-- No puede testear porque regresa un void
+	@Test
 	@Order(4)
 	@DisplayName("eliminarSecretoById() - Eliminado con Exito")
 	void eliminarSecretoById(){
+
+		//-- Datos: Indicamos que no regresa nada
+		Mockito.doNothing().when(this.iSecretsRepository).deleteById(Mockito.any());
+
+		//-- Servicio: Consumimos el servicio
+		this.iServiceSecrets.eliminarSecretoById(1L);
 
 	}
 

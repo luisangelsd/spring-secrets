@@ -71,12 +71,14 @@ class ServicesCategoriasTest {
     void listarCategorias() {
         //-- Datos
         Mockito.when(this.iCategoriasCrudRepository.findAll()).thenReturn(Datos.getListarCategorias());
+
         //-- Repository
         List<EntityCategoria> list = this.iServicesCategorias.listarCategorias();
 
         //-- Test
         Assertions.assertFalse(list.isEmpty());
     }
+
     @Test
     @Order(2)
     @DisplayName("listarCategorias() - No Encuentra ")

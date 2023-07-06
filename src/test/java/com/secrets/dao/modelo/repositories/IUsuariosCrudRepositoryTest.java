@@ -2,6 +2,7 @@ package com.secrets.dao.modelo.repositories;
 
 import com.secrets.dao.oauth2.services.entitys.EntityUsuario;
 import org.junit.jupiter.api.*;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -50,10 +51,13 @@ class IUsuariosCrudRepositoryTest {
 
     //------------------------------------------------------------------------------------------------
 
-    @Test //-- No lo pude testear porque regresa un void
+    @Test
     @Order(2)
     @DisplayName("editarUrlImagenPerfilUsuario() - Editada con Exito")
     void editarUrlImagenPerfilUsuario(){
+
+        //-- Servicio: Validamos que no retorne nada cuando sea llamado
+        Mockito.doNothing().when(this.iUsuariosCrudRepository).editarUrlImagenPerfilUsuario(Mockito.any(), Mockito.any());
 
         //-- Servicio
         this.iUsuariosCrudRepository.editarUrlImagenPerfilUsuario("admim","https://sandovalguicho.com/imgs/img.png");
