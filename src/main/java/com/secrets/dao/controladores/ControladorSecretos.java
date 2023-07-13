@@ -90,7 +90,7 @@ public class ControladorSecretos {
 	public List<EntitySecreto> listarSecretosByIdCategoria(@PathVariable Long idCategoria){
 
 			//-- Validar: Categoria
-			this.entityCategoria=this.servicesCategorias.buscarCategoriaById(idCategoria);
+			this.entityCategoria = this.servicesCategorias.buscarCategoriaById(idCategoria);
 			if (this.entityCategoria == null) {
 				throw new RunTimeExceptionNotFound("¡No existe la Categoria!");
 			}

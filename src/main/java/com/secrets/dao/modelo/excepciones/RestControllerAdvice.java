@@ -54,7 +54,6 @@ public class RestControllerAdvice {
 		 
 		this.responseBody=new HashMap<>();
 		 this.errors=new HashMap<>();
-		 
 		//-- Preparando Errores
 		this.errors.put("message", e.getMessage());
 		
