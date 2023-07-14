@@ -48,7 +48,6 @@ public class EntitySecreto implements Serializable{
 	@PrePersist
 	private void prePersist() {
 			fCreacion= LocalDate.now();
-		
 	}
 	
 	public EntitySecreto() {}
