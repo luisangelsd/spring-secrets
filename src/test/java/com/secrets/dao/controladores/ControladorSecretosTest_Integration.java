@@ -191,7 +191,7 @@ class ControladorSecretosTest_Integration {
 
         //-- Datos
         EntitySecreto secreto = Datos.secreto1;
-        secreto.setSecreto("");
+        secreto.setSecreto("¡Este secreto fue editado!");
 
         //-- Consumir endPoint editar y despues buscar
         ResponseEntity<EntitySecreto> response =
@@ -206,21 +206,45 @@ class ControladorSecretosTest_Integration {
 
     //------------------------------------------------------------------------------------------------
 
+    //-- Este necesita un Tocken asegura de tener uno valido
     @Test
     @Order(6)
-    void guardarEditarSecretoAdm() {
+    @DisplayName("editarSecretoAdm() - Funciona")
+    void editarSecretoAdm() {
 
-        //-- Consumir endPoint editar y despues buscar
-        //  HttpHeaders headers = new HttpHeaders();
-        //  headers.setBasicAuth("username", "password");
+        //-- Datos
+        EntitySecreto secreto = Datos.secreto1;
+        secreto.setSecreto("¡Este secreto fue editado!");
+        secreto.setfCreacion(LocalDate.now());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(Datos.tokenAdmin);
+
+        //-- Consumir endPoint
+        ResponseEntity<EntitySecreto> response = this.restTemplate.exchange("/adm/editar/1/categoria-id/1",HttpMethod.PUT,new HttpEntity<>(secreto, headers), EntitySecreto.class);
+
+        //-- Test
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+        Assertions.assertEquals("¡Este secreto fue editado!", response.getBody().getSecreto());
     }
+
     //------------------------------------------------------------------------------------------------
 
     @Test
     @Order(7)
      @DisplayName("eliminarSecretoById() - Eliminado")
     void eliminarSecretoById() {
+        //-- Datos
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(Datos.tokenAdmin);
 
-//      ResponseEntity<?> response = this.restTemplate.delete("");
+        //-- Consumir endPoint
+        ResponseEntity<EntitySecreto> response = this.restTemplate.exchange("/adm/eliminar/1",HttpMethod.DELETE,new HttpEntity<>(headers), EntitySecreto.class);
+
+        //Tests
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+        Assertions.assertTrue(response.hasBody());
+        Assertions.assertEquals(1, response.getBody().getId());
     }
 }

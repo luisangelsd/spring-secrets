@@ -174,11 +174,6 @@ public class ControladorSecretos {
 
 		//-- Validar: Solamente se pueda editar el secreto si pertenece a la misma fecha
 		if (!entitySecretoActualizar.getfCreacion().equals( LocalDate.now())) {
-			System.out.println("********************************************** Fecha hoy:"+LocalDate.now());
-			System.out.println("********************************************** Fecha registro"+entitySecretoActualizar.getfCreacion());
-			System.out.println("**********************************************");
-			System.out.println("**********************************************");
-			System.out.println("**********************************************");
 			throw new RuntimeException("Lo sentimos, este secreto no puede ser editado, debido a que pertenece a una fecha diferente a la de hoy");
 		}
 
@@ -196,7 +191,7 @@ public class ControladorSecretos {
 	@Secured({"ROLE_ADMIN","ROLE_USER"})
 	@PutMapping("adm/editar/{idSecreto}/categoria-id/{idCategoria}")
 	@ResponseStatus(HttpStatus.OK)
-	public EntitySecreto guardarEditarSecretoAdm(@Valid @RequestBody EntitySecreto requestEntity, @PathVariable Long idSecreto, @PathVariable Long idCategoria){
+	public EntitySecreto editarSecretoAdm(@Valid @RequestBody EntitySecreto requestEntity, @PathVariable Long idSecreto, @PathVariable Long idCategoria){
 
 
 		//-- Validar: Secreto
